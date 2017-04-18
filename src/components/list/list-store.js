@@ -1,7 +1,7 @@
 import {observable, action, computed} from "mobx"
 
 class WindowsStore {
-    @observable windows = ["livingroom", "bedroom", "sdff","sdfsfdfsf", "sdxcvxvxcv", "vfeferer", "vreergegfer","vvdvzsdcssdc", "vrrthrthrh", "ertertertt", "rrahul", "vdvdvdf", "werwrw", "vfdfvdfvd", "werwer", "sdasczczx", "rterttet"];
+    @observable windows = [];
     @observable pendingRequestCount = 0;
     @computed get isLoading() {
 		return this.pendingRequestCount > 0;

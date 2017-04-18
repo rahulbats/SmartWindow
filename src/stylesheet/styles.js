@@ -24,7 +24,7 @@ const styles = StyleSheet.create({
         marginBottom: 20,
         borderRadius:2,
         paddingLeft: 10,
-        //width: 300
+        height: 30
     },
     button: {
         alignSelf: 'stretch',
