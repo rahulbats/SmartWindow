@@ -1,6 +1,6 @@
 //import liraries
 import React, { Component } from 'react';
-import { View, Text, StyleSheet, TextInput, Button, Image, Keyboard } from 'react-native';
+import { View, Text, StyleSheet, TextInput, Button, Image, Keyboard, AsyncStorage } from 'react-native';
 import {observer } from "mobx-react/native";
 import {WindowList} from "../list/list"
 import styles from '../../stylesheet/styles';
@@ -14,10 +14,32 @@ class TsInit extends Component {
     constructor(){
         super();
         //console.log(this.props);
+        
     }
-    gotoList(apiKey){
-        //windowsStore.loadWindows(apiKey);
+    async retrieveApiKey(){
+        try {
+            const value = await AsyncStorage.getItem('apiKey');
+            if (value !== null){
+                // We have data!!
+                this.props.store.apiKey = value;
+                this.gotoList(value);
+            }
+        } catch (error) {
+        // Error retrieving data
+        }
+    }
+    async saveApiKey(apiKey){
         Keyboard.dismiss(); 
+        try {
+            await AsyncStorage.setItem('apiKey', apiKey);
+        } catch (error) {
+        // Error saving data
+        }
+        this.gotoList(apiKey);
+    }
+     gotoList(apiKey){
+        //windowsStore.loadWindows(apiKey);
+        
         this.props.navigator.push( {
                 name: "windowlist",
                 title: "Windows List",
@@ -30,6 +52,7 @@ class TsInit extends Component {
         );
     }
     render() {
+        this.retrieveApiKey();
         const { apiKey } = this.props.store
         return (
    
@@ -47,7 +70,7 @@ class TsInit extends Component {
                         {apiKey!==''&&
                         <View style={styles.button}>
                         <Button
-                            onPress = {()=>this.gotoList(apiKey)}
+                            onPress = {()=>this.saveApiKey(apiKey)}
                             title="Connect"
                             color="#841584"
                             accessibilityLabel="Learn more about this purple button"

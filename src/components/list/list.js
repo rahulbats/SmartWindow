@@ -17,6 +17,10 @@ constructor() {
    this.state = { 
         windowsDS: dataSource.cloneWithRows([]) 
      };*/
+
+
+
+
   }
   renderRow(rowData, sectionID, rowID) {
       return (
@@ -36,12 +40,14 @@ constructor() {
          
       );
   }
-
+  componentWillMount() {
+    const apiKey = this.props.apiKey;
+    //windowsStore.addWindow("dfsdfsdf");
+    windowsStore.loadWindows(apiKey);
+  }
   render() {
     const { windows } = windowsStore;
-    const apiKey = this.props.apiKey;
-    windowsStore.addWindow("dfsdfsdf");
-    //windowsStore.loadWindows(apiKey);
+    
     
     return (
        <View style={styles.container}>
@@ -55,7 +61,7 @@ constructor() {
                   color="#00aa00"
                 />
                }
-               <Text style={[styles.headingText,styles.text]}>Here are the list of your windows. Connect to one to control it. </Text>
+               <Text style={[styles.headingText,styles.text]}>Here are the list of your windows. Connect to one to control it.</Text>
           </View>
          
           {//<ListView dataSource={ this.state.windowsDS } renderRow={this.renderRow.bind(this)} style={{alignSelf: 'stretch'}}></ListView>}
@@ -73,7 +79,7 @@ constructor() {
 
          
                   <View style={stylesLocal.itemContainer}>
-                    <Text style={{padding: 10}}>{ l.toUpperCase() }</Text>
+                    <Text style={{padding: 10}}>{ l.name.toUpperCase() }</Text>
                     <View style={{height:1, backgroundColor: '#dddddd'}}/>
         
                   </View>
