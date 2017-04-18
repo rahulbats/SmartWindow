@@ -32,11 +32,13 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
     },
-    input: {
+    /*input: {
+        flex:0,
         height:40,
-        backgroundColor: 'rgba(255,255,255,0.7)',
+        width:200,
+        backgroundColor: 'red',
         marginBottom: 20
-    }
+    }*/
 });
 
 //make this component available to the app

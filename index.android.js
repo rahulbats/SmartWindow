@@ -4,50 +4,91 @@
  * @flow
  */
 
+
 import React, { Component } from 'react';
 import {
   AppRegistry,
   StyleSheet,
   Text,
-  View
+  View,
+  Navigator,
+  Button
 } from 'react-native';
+import TsInit from './src/components/tsinit/tsinit';
+import initStore from './src/components/tsinit/tsinit-store';
+import WindowList from './src/components/list/list';
+import styles from './src/stylesheet/styles';
 
 export default class SmartWindow extends Component {
-  render() {
+  renderScene (route, navigator) {
+    if(route.name == 'windowlist') {
+     return <WindowList navigator={navigator} {...route.passProps} />
+   }
+   if(route.name == 'tsinit') {
+     return <TsInit navigator={navigator} {...route.passProps} />
+   }
+   
+  }
+  configureScene (route, routeStack) {
+    if (route.type === 'Modal') {
+      return Navigator.SceneConfigs.FloatFromBottom
+    }
+    return Navigator.SceneConfigs.PushFromRight
+  }
+  
+
+
+  render () {
     return (
-      <View style={styles.container}>
-        <Text style={styles.welcome}>
-          Welcome to React Native!
-        </Text>
-        <Text style={styles.instructions}>
-          To get started, edit index.android.js
-        </Text>
-        <Text style={styles.instructions}>
-          Double tap R on your keyboard to reload,{'\n'}
-          Shake or press menu button for dev menu
-        </Text>
-      </View>
-    );
+      <Navigator
+        configureScene={this.configureScene.bind(this)}
+        renderScene={this.renderScene.bind(this)}
+        initialRoute={{
+          name: 'tsinit',
+          title: 'Connect to thingspeak',
+          passProps: {
+            store: initStore
+          }
+        }}
+        navigationBar={
+          <Navigator.NavigationBar 
+            routeMapper={ NavigationBarRouteMapper } 
+            style = {styles.navigationBar}
+            navigationStyles={Navigator.NavigationBar.StylesIOS}
+          />
+        } 
+        
+         />
+        
+    )
+  }
+}
+var NavigationBarRouteMapper = { 
+  LeftButton: function( route, navigator, index, navState ){
+    
+   if(index > 0) {
+      return (
+       <Button
+          color="#841584"
+          onPress={() => { if (index > 0) { navigator.pop() } }}
+          title="back"/>
+          );
+         
+    } 
+    else { return null }
+     
+  },
+  Title: function( route, navigator, index, navState ){
+    return(
+      <Text style={[styles.navBarText, styles.navBarTitleText]}>{ route.title }</Text>
+    )
+  },
+  RightButton: function( route, navigator, index, navState ){
+    return(
+      <Text>{ route.rightButton }</Text>
+    )
   }
 }
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: '#F5FCFF',
-  },
-  welcome: {
-    fontSize: 20,
-    textAlign: 'center',
-    margin: 10,
-  },
-  instructions: {
-    textAlign: 'center',
-    color: '#333333',
-    marginBottom: 5,
-  },
-});
 
 AppRegistry.registerComponent('SmartWindow', () => SmartWindow);

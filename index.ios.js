@@ -79,7 +79,7 @@ var NavigationBarRouteMapper = {
   },
   Title: function( route, navigator, index, navState ){
     return(
-      <Text>{ route.title }</Text>
+      <Text style={[styles.navBarText, styles.navBarTitleText]}>{ route.title }</Text>
     )
   },
   RightButton: function( route, navigator, index, navState ){

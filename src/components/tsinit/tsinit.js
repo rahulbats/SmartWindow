@@ -1,6 +1,6 @@
 //import liraries
 import React, { Component } from 'react';
-import { View, Text, StyleSheet, TextInput, Button, Image} from 'react-native';
+import { View, Text, StyleSheet, TextInput, Button, Image, Keyboard } from 'react-native';
 import {observer } from "mobx-react/native";
 import {WindowList} from "../list/list"
 import styles from '../../stylesheet/styles';
@@ -16,13 +16,15 @@ class TsInit extends Component {
         //console.log(this.props);
     }
     gotoList(apiKey){
-        windowsStore.loadWindows(apiKey);
+        //windowsStore.loadWindows(apiKey);
+        Keyboard.dismiss(); 
         this.props.navigator.push( {
                 name: "windowlist",
                 title: "Windows List",
                 passProps: {
                     type: "Modal",
-                    store: windowsStore
+                    //store: windowsStore,
+                    apiKey: apiKey
                 }
             }
         );
@@ -40,6 +42,7 @@ class TsInit extends Component {
                             onChangeText={(text)=>this.updateProperty(text)}
                             value={apiKey}
                             placeholder="Thingspeak API key"
+                            maxLength={20}
                         />
                         {apiKey!==''&&
                         <View style={styles.button}>

@@ -4,7 +4,6 @@ const styles = StyleSheet.create({
         flex: 1,
         //justifyContent: 'center',
         alignItems: 'center',
-        backgroundColor:'#2A8CEF',
         marginTop:60
     },
     heading: {
@@ -14,21 +13,20 @@ const styles = StyleSheet.create({
         //borderBottomWidth: 1,
         //borderBottomColor: 'white'
     },
-    text: {
-       color: 'white'
-    },
+   
     headingText: {
         fontWeight: 'bold'
     },
     input: {
-        height:40,
-        backgroundColor: 'rgba(255,255,255,0.7)',
+        alignSelf: 'stretch',
+        //textAlign: 'center',
         marginBottom: 20,
         borderRadius:2,
-        paddingLeft: 10
-
+        paddingLeft: 10,
+        //width: 300
     },
     button: {
+        alignSelf: 'stretch',
         backgroundColor: 'rgba(255,255,255,0.7)'
     },
     logo: {
@@ -40,31 +38,25 @@ const styles = StyleSheet.create({
             marginBottom:40
     },  
     logoContainer: {
+        backgroundColor:'#2A8CEF',
         flexDirection: 'row',
         position: 'absolute',
-        bottom: 20
+        bottom: 0
     } ,
   navigationBar:{
     backgroundColor: '#2A8CEF'
   },
-  navBarText: {
+   navBarText: {
     fontSize: 16,
     marginVertical: 10,
-    color: 'white'
+    color: "white",
   },
   navBarTitleText: {
     fontWeight: '500',
     marginVertical: 9,
-    color: 'white'
   },
   navBarLeftButton: {
     paddingLeft: 10,
-  },
-  navBarRightButton: {
-    paddingRight: 10,
-  },
-  navBarButtonText: {
-    color: 'blue',
-  },
+  }
 });
 export default styles;
