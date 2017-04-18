@@ -34,6 +34,7 @@ class TsInit extends Component {
         return (
    
             <View style={styles.container}>
+                <View style={styles.card}>
                         <View style={styles.heading}>
                             <Text style={[styles.headingText,styles.text]}>Welcome to SmartWindow. To get started connect to your thingspeak account using the apikey. </Text>
                         </View>
@@ -55,7 +56,9 @@ class TsInit extends Component {
                             </View>  
                         }   
 
-                         <View style={styles.logoContainer} >
+                         
+                </View>
+                <View style={styles.logoContainer} >
                             <Image style={styles.logo} source={require('../../images/window_logo.png')}/>
                         </View>
             </View>

@@ -4,7 +4,8 @@ const styles = StyleSheet.create({
         flex: 1,
         //justifyContent: 'center',
         alignItems: 'center',
-        marginTop:60
+        marginTop:60,
+        backgroundColor: '#f1f1f1'
     },
     heading: {
         height: 80,
@@ -57,6 +58,23 @@ const styles = StyleSheet.create({
   },
   navBarLeftButton: {
     paddingLeft: 10,
-  }
+  },
+   card: {
+        flex: 1,
+        alignSelf: 'stretch',
+        padding: 10,
+        margin:10,
+        backgroundColor: '#ffffff',
+        borderRadius: 3,
+        borderColor: 'lightgrey',
+        borderWidth: 1,
+        shadowColor: 'rgba(0, 0, 0, 0.12)',
+        shadowOpacity: 0.8,
+        shadowRadius: 2,
+        shadowOffset: {
+            height: 1,
+            width: 2,
+        },
+     },
 });
 export default styles;

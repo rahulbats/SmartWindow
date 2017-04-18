@@ -4,6 +4,7 @@ import { View, Text, StyleSheet, TextInput, ListView , ActivityIndicator, Toucha
 import styles from '../../stylesheet/styles';
 import {observer } from "mobx-react/native";
 import windowsStore from './list-store';
+
 var sampleArray =["livingroom", "bedroom", "sdff","sdfsfdfsf", "sdxcvxvxcv", "vfeferer", "vreergegfer","vvdvzsdcssdc", "vrrthrthrh", "ertertertt", "rrahul", "vdvdvdf", "werwrw", "vfdfvdfvd", "werwer", "sdasczczx", "rterttet"];
 
 @observer
@@ -37,6 +38,19 @@ constructor() {
       );
   }
 
+  gotoDetails = () => {
+      this.props.navigator.push( {
+                name: "details",
+                title: "Window Detail",
+                passProps: {
+                    type: "Modal",
+                    //store: windowsStore,
+                    apiKey: "apiKey"
+                }
+            }
+        );
+  };
+
   render() {
     const { windows } = windowsStore;
     const apiKey = this.props.apiKey;
@@ -69,10 +83,10 @@ constructor() {
        
             {windows.map((l, i) => {
               return <TouchableOpacity key={i}
-                  underlayColor={ "#aaa" } style={{ height:44}}>
+                  underlayColor={ "#aaa" } style={{ height:44}} onPress={this.gotoDetails}>
 
          
-                  <View style={stylesLocal.itemContainer}>
+                  <View style={[stylesLocal.itemContainer]}>
                     <Text style={{padding: 10}}>{ l.toUpperCase() }</Text>
                     <View style={{height:1, backgroundColor: '#dddddd'}}/>
         
@@ -108,7 +122,7 @@ const stylesLocal = StyleSheet.create({
   },
   itemContainer: {
     borderBottomWidth: 1,
-    
+    overflow: "hidden",
     borderBottomColor: '#ededed',
     height: 60,
     alignSelf: 'stretch',

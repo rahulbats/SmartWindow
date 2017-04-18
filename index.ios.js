@@ -16,6 +16,7 @@ import {
 import TsInit from './src/components/tsinit/tsinit';
 import initStore from './src/components/tsinit/tsinit-store';
 import WindowList from './src/components/list/list';
+import Details from './src/components/details/details';
 import styles from './src/stylesheet/styles';
 
 export default class SmartWindow extends Component {
@@ -26,7 +27,9 @@ export default class SmartWindow extends Component {
    if(route.name == 'tsinit') {
      return <TsInit navigator={navigator} {...route.passProps} />
    }
-   
+    else if(route.name == 'details') {
+     return <Details navigator={navigator} {...route.passProps} />
+   }
   }
   configureScene (route, routeStack) {
     if (route.type === 'Modal') {
