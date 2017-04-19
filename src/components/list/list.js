@@ -3,26 +3,13 @@ import React, { Component } from 'react';
 import { View, Text, StyleSheet, TextInput, ListView , ActivityIndicator, TouchableOpacity, ScrollView} from 'react-native';
 import styles from '../../stylesheet/styles';
 import {observer } from "mobx-react/native";
-import windowsStore from './list-store';
+import windowsStore from '../../stores/list/list-store';
 
 var sampleArray =["livingroom", "bedroom", "sdff","sdfsfdfsf", "sdxcvxvxcv", "vfeferer", "vreergegfer","vvdvzsdcssdc", "vrrthrthrh", "ertertertt", "rrahul", "vdvdvdf", "werwrw", "vfdfvdfvd", "werwer", "sdasczczx", "rterttet"];
 
 @observer
 class WindowList extends Component {
-    
-constructor() {
-    super();
-   
-   /*var dataSource = new ListView.DataSource({rowHasChanged:(r1,r2) => r1 !=r2 })
 
-   this.state = { 
-        windowsDS: dataSource.cloneWithRows([]) 
-     };*/
-
-
-
-
-  }
   renderRow(rowData, sectionID, rowID) {
       return (
         <TouchableOpacity
@@ -42,14 +29,15 @@ constructor() {
       );
   }
 
-  gotoDetails = () => {
+  gotoDetails = (id, readKey, writeKey) => {
       this.props.navigator.push( {
                 name: "details",
                 title: "Window Detail",
                 passProps: {
                     type: "Modal",
-                    //store: windowsStore,
-                    apiKey: "apiKey"
+                    id: id,
+                    readApiKey: readKey,
+                    writeApiKey: writeKey
                 }
             }
         );
@@ -87,12 +75,13 @@ constructor() {
           
 
            {!windowsStore.isLoading &&!windows.length ? <NoList /> : null}
+           {!windowsStore.isLoading && windows.length &&
            <View style={{flex:1, alignSelf: 'stretch', flexDirection:'row'}}>
          <ScrollView contentContainerStyle={styles.contentContainer}>
        
             {windows.map((l, i) => {
               return <TouchableOpacity key={i}
-                  underlayColor={ "#aaa" } style={{ height:44}} onPress={this.gotoDetails}>
+                  underlayColor={ "#aaa" } style={{ height:44}}  onPress={() => this.gotoDetails(l.id, l.readApiKey, l.writeApiKey)}>
 
                   <View style={stylesLocal.itemContainer}>
                     <Text style={{padding: 10}}>{ l.name.toUpperCase() }</Text>
@@ -106,7 +95,7 @@ constructor() {
    
           </ScrollView>
           </View>
-
+           }   
         </View>
     );
   }

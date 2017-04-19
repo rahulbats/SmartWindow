@@ -4,7 +4,6 @@ import { View, Text, StyleSheet, TextInput, Button, Image, Keyboard, AsyncStorag
 import {observer } from "mobx-react/native";
 import {WindowList} from "../list/list"
 import styles from '../../stylesheet/styles';
-import windowsStore from '../list/list-store'
 @observer
 class TsInit extends Component {
     
@@ -45,7 +44,6 @@ class TsInit extends Component {
                 title: "Windows List",
                 passProps: {
                     type: "Modal",
-                    //store: windowsStore,
                     apiKey: apiKey
                 }
             }
@@ -73,7 +71,7 @@ class TsInit extends Component {
                             onPress = {()=>this.saveApiKey(apiKey)}
                             title="Connect"
                             color="#841584"
-                            accessibilityLabel="Learn more about this purple button"
+                            accessibilityLabel="Connect to thingspeak using your api key"
                             /> 
                             </View>  
                         }   

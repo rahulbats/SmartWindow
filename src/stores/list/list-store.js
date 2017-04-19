@@ -9,10 +9,27 @@ class WindowsStore {
 
     @action loadWindows(apiKey){
          this.pendingRequestCount++;
+         this.windows = [];
+         var temp =[];
          fetch('https://thingspeak.com/channels.json?api_key='+apiKey)
             .then((response) => response.json())
             .then((responseJson) => {
-                this.windows = responseJson;
+                responseJson.forEach(channel=>{
+                    var apiKeys = channel.api_keys;
+                    var readKey='';
+                    var writeKey='';
+                    apiKeys.forEach(apiKey => {
+                        if(apiKey.write_flag===false) {
+                            readKey = apiKey.api_key;
+                        } else {
+                            writeKey = apiKey.api_key;
+                        }
+                    });
+                    temp.push({name: channel.name, id:channel.id ,readApiKey: readKey, writeApiKey: writeKey});
+                    
+                });
+                this.windows.replace(temp);
+                //this.windows = responseJson;
                 //return responseJson.movies;
                 this.pendingRequestCount--;
             })

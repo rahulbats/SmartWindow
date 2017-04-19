@@ -14,7 +14,7 @@ import {
   Button
 } from 'react-native';
 import TsInit from './src/components/tsinit/tsinit';
-import initStore from './src/components/tsinit/tsinit-store';
+import initStore from './src/stores/tsinit/tsinit-store';
 import WindowList from './src/components/list/list';
 import Details from './src/components/details/details';
 import styles from './src/stylesheet/styles';
