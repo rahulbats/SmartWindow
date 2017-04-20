@@ -54,32 +54,34 @@ class TsInit extends Component {
         const { apiKey } = this.props.store
         return (
    
-            <View style={styles.container}>
-                        <View style={styles.heading}>
-                            <Text style={[styles.headingText,styles.text]}>Welcome to SmartWindow. To get started connect to your thingspeak account using the apikey. </Text>
-                        </View>
-                        <TextInput
-                            style={styles.input}
-                            onChangeText={(text)=>this.updateProperty(text)}
-                            value={apiKey}
-                            placeholder="Thingspeak API key"
-                            maxLength={20}
-                        />
-                        {apiKey!==''&&
-                        <View style={styles.button}>
-                        <Button
-                            onPress = {()=>this.saveApiKey(apiKey)}
-                            title="Connect"
-                            color="#841584"
-                            accessibilityLabel="Connect to thingspeak using your api key"
-                            /> 
-                            </View>  
-                        }   
-
+           
                          <View style={styles.logoContainer} >
-                            <Image style={styles.logo} source={require('../../images/window_logo.png')}/>
+                            <Image style={styles.logo} source={require('../../images/window-photo.jpeg')}>
+                                    <View style={styles.container}>
+                                             <View style={styles.heading}>
+                                                <Text style={[styles.headingText,styles.text]}>Welcome to SmartWindow. To get started connect to your thingspeak account using the apikey. </Text>
+                                            </View>
+                                            <TextInput
+                                                style={styles.input}
+                                                onChangeText={(text)=>this.updateProperty(text)}
+                                                value={apiKey}
+                                                placeholder="Thingspeak API key"
+                                                maxLength={20}
+                                            />
+                                            {apiKey!==''&&
+                                            <View style={styles.button}>
+                                            <Button
+                                                onPress = {()=>this.saveApiKey(apiKey)}
+                                                title="Connect"
+                                                color="#841584"
+                                                accessibilityLabel="Connect to thingspeak using your api key"
+                                                /> 
+                                                </View>  
+                                            }   
+                                    </View>
+                            </Image>
                         </View>
-            </View>
+            
             
         );
     }
