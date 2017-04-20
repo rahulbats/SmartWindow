@@ -5,7 +5,7 @@ const styles = StyleSheet.create({
         //justifyContent: 'center',
         alignItems: 'center',
         marginTop:60,
-        backgroundColor: '#f1f1f1'
+        //backgroundColor: '#f1f1f1'
     },
     heading: {
         height: 80,
@@ -32,17 +32,15 @@ const styles = StyleSheet.create({
     },
     logo: {
             flex: 1,
-            width: 100,
-            height: 60,
+            //width: 100,
+            //height: 60,
             resizeMode: 'contain',
-            marginTop:40,
-            marginBottom:40
     },  
     logoContainer: {
-        backgroundColor:'#2A8CEF',
-        flexDirection: 'row',
+        //backgroundColor:'#2A8CEF',
+        //flexDirection: 'row',
         position: 'absolute',
-        bottom: 0
+        top: 0
     } ,
   navigationBar:{
     backgroundColor: '#2A8CEF'
