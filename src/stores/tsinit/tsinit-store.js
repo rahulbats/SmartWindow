@@ -2,6 +2,7 @@ import {observable} from "mobx"
 
 class InitStore {
     @observable apiKey = "";
+    @observable animOpacity = 0;
     setApiKey(value) {
         this.apiKey = value;
     }

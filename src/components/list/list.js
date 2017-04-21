@@ -9,22 +9,21 @@ var sampleArray =["livingroom", "bedroom", "sdff","sdfsfdfsf", "sdxcvxvxcv", "vf
 
 @observer
 class WindowList extends Component {
-
+   
   renderRow(rowData, sectionID, rowID) {
       return (
-        <TouchableOpacity
-          underlayColor={ "#aaa" } style={{ height:44}}>
+        <View>
+        <TouchableOpacity 
+                  underlayColor={ "#fff" } style={ styles.card}  onPress={() => this.gotoDetails(rowData.id, rowData.readApiKey, rowData.writeApiKey)}>
 
-         
-            <View>
-              <Text style={{padding: 10}}>{ rowData }</Text>
-              <View style={{height:1, backgroundColor: '#dddddd'}}/>
-  
-            </View>
+                 
+                    <Text style={{padding: 10}}>{ rowData.name.toUpperCase() }</Text>
+                    
+              
    
 
         </TouchableOpacity>
-
+        </View>
          
       );
   }
@@ -46,12 +45,14 @@ class WindowList extends Component {
 
   componentWillMount() {
     const apiKey = this.props.apiKey;
-    //windowsStore.addWindow("dfsdfsdf");
+    //windowsStore.addWindow({name:'sdfdsf',readApiKey:'sdfsf', writeApiKey:'dsfsd'});
     windowsStore.loadWindows(apiKey);
   }
 
   render() {
     const { windows } = windowsStore;
+    const ds = new ListView.DataSource({ rowHasChanged: (r1, r2) => r1 !== r2 });
+    const dataSource = ds.cloneWithRows(windows.slice());
     
     
     return (
@@ -69,12 +70,15 @@ class WindowList extends Component {
                <Text style={[styles.headingText,styles.text]}>Here are the list of your windows. Connect to one to control it.</Text>
           </View>
          
-          {//<ListView dataSource={ this.state.windowsDS } renderRow={this.renderRow.bind(this)} style={{alignSelf: 'stretch'}}></ListView>}
-          }
+         
+          <ListView enableEmptySections={true} dataSource={ dataSource } renderRow={this.renderRow.bind(this)} style={{flex:3,alignSelf: 'stretch'}}></ListView>
+        
+         
+          
     
           
 
-           {!windowsStore.isLoading &&!windows.length ? <NoList /> : null}
+           {/*!windowsStore.isLoading &&!windows.length ? <NoList /> : null}
            {!windowsStore.isLoading && windows.length &&
            <View style={{flex:1, alignSelf: 'stretch', flexDirection:'row'}}>
          <ScrollView contentContainerStyle={styles.contentContainer}>
@@ -95,7 +99,7 @@ class WindowList extends Component {
    
           </ScrollView>
           </View>
-           }   
+           */}   
         </View>
     );
   }
@@ -116,15 +120,6 @@ const stylesLocal = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     padding: 8,
-  },
-  itemContainer: {
-    borderBottomWidth: 1,
-    overflow: "hidden",
-    borderBottomColor: '#ededed',
-    height: 60,
-    alignSelf: 'stretch',
-    flexDirection:'row',
-    paddingLeft: 10
   },
   item: {
     fontSize: 18,

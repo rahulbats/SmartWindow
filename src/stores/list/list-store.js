@@ -1,11 +1,18 @@
-import {observable, action, computed} from "mobx"
+import {observable, action, computed} from "mobx";
+import { ListView } from 'react-native';
 
 class WindowsStore {
     @observable windows = [];
     @observable pendingRequestCount = 0;
+    
     @computed get isLoading() {
 		return this.pendingRequestCount > 0;
 	}
+
+    /*ds = new ListView.DataSource({ rowHasChanged: (r1, r2) => r1 !== r2 });
+    @computed get dataSource() {
+        return this.ds.cloneWithRows(this.windows.slice());
+    }*/
 
     @action loadWindows(apiKey){
          this.pendingRequestCount++;

@@ -2,17 +2,19 @@ import {StyleSheet} from 'react-native';
 const styles = StyleSheet.create({
   container: {
         flex: 1,
-        //justifyContent: 'center',
+        marginTop:60,
+        paddingTop: 20,
         alignItems: 'center',
-        position: 'absolute',
-        top: 100,
-        //backgroundColor: '#f1f1f1'
+        backgroundColor: '#f1f1f1',
+        flexDirection: 'column',
+        justifyContent: 'flex-start'
     },
     heading: {
-        flex:1,
+        flex:.1,
         alignItems: 'center',
         //borderBottomWidth: 1,
         //borderBottomColor: 'white'
+        
     },
    
     headingText: {

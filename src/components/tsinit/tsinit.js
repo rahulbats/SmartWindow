@@ -1,6 +1,10 @@
 //import liraries
 import React, { Component } from 'react';
-import { View, Text, StatusBar, StyleSheet, TextInput, Button, Image, Keyboard, AsyncStorage, Dimensions } from 'react-native';
+import { View, Text, StatusBar, StyleSheet, 
+    TextInput, Button, Image, Keyboard, 
+    AsyncStorage, Dimensions, Animated , 
+    Easing, FadeInView
+} from 'react-native';
 import {observer } from "mobx-react/native";
 import {WindowList} from "../list/list"
 //import styles from '../../stylesheet/styles';
@@ -12,7 +16,9 @@ class TsInit extends Component {
     }
     constructor(){
         super();
-        //console.log(this.props);
+        this.state = {
+            fadeAnim: new Animated.Value(0),
+        };
         
     }
     async retrieveApiKey(){
@@ -49,13 +55,25 @@ class TsInit extends Component {
             }
         );
     }
+
+    componentDidMount() {
+        Animated.timing(
+        this.state.fadeAnim,
+        {
+            toValue: 1,
+            duration: 5000,
+        }                              
+        ).start();                             // Starts the animation
+    }
+
     render() {
         this.retrieveApiKey();
         
         const { apiKey } = this.props.store
         return (
-   
-                            <View style={{flex:.8}}>
+                            <Animated.View                            // Special animatable View
+                                style={{flex:.8,opacity: this.state.fadeAnim}}>
+                            
                             <StatusBar
                                 backgroundColor="blue"
                                 barStyle="light-content"
@@ -95,7 +113,7 @@ class TsInit extends Component {
 
 
                             </Image>
-                            </View>
+                            </Animated.View>
             
             
         );
