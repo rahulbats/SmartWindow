@@ -3,7 +3,7 @@ import React, { Component } from 'react';
 import { View, Text, StatusBar, StyleSheet, 
     TextInput, Button, Image, Keyboard, 
     AsyncStorage, Dimensions, Animated , 
-    Easing, FadeInView
+    Easing, FadeInView, Linking, TouchableOpacity
 } from 'react-native';
 import {observer } from "mobx-react/native";
 import {WindowList} from "../list/list"
@@ -63,16 +63,18 @@ class TsInit extends Component {
             toValue: 1,
             duration: 5000,
         }                              
-        ).start();                             // Starts the animation
+        ).start();                
+        this.retrieveApiKey();
     }
 
     render() {
-        this.retrieveApiKey();
+        
         
         const { apiKey } = this.props.store
         return (
+                         
                             <Animated.View                            // Special animatable View
-                                style={{flex:.8,opacity: this.state.fadeAnim}}>
+                                style={{flex:1,opacity: this.state.fadeAnim,  backgroundColor:'black'}}>
                             
                             <StatusBar
                                 backgroundColor="blue"
@@ -80,12 +82,14 @@ class TsInit extends Component {
                                 hidden={true}
                             />         
                             <Image style={styles.backgroundpic} source={require('../../images/window-photo.jpeg')} resizeMode='stretch'>
-                                     <View style={{flex:2}}></View>  
+                                     <View style={{flex:1}}></View>  
                                      <Image style={{flex:1,alignSelf:'center'}} source={require('../../images/Logo.png')} resizeMode='contain'/>
-                                     <View style={styles.heading}>
+                                     <View style={[styles.heading, {flex:1}]}>
 
                                                 <Text style={styles.headingText}>Welcome to SmartWindow.</Text>
-                                                 <Text style={styles.headingText}>Connect to thingspeak using your apikey.</Text>
+                                                
+                                                <Text style={styles.headingText}>Connect to thingspeak using your apiKey</Text>
+                                                 
                                                  <TextInput
                                                     style={styles.input}
                                                     onChangeText={(text)=>this.updateProperty(text)}
@@ -102,7 +106,9 @@ class TsInit extends Component {
                                                         accessibilityLabel="Connect to thingspeak using your api key"
                                                         /> 
                                                     
-                                                        
+                                                  <TouchableOpacity onPress={() => Linking.openURL('https://thingspeak.com/account/profile')}>
+                                                        <Text style={[styles.headingText,{color:'lightblue', marginTop: 20}]}>No apikey? Get it at thingspeak</Text>
+                                                    </TouchableOpacity>      
                                                     </View>            
                                             </View>
                                       
@@ -114,7 +120,7 @@ class TsInit extends Component {
 
                             </Image>
                             </Animated.View>
-            
+                    
             
         );
     }
@@ -143,7 +149,7 @@ const styles = StyleSheet.create({
         marginBottom: 20,
         borderRadius:2,
         margin: 10,
-        padding: 10,
+        padding: 5,
         height: 40
     },
     button: {

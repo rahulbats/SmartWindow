@@ -7,21 +7,21 @@ import TimerMixin from 'react-timer-mixin';
 
 
 @observer
-class Indoor extends Component {
+class Outdoor extends Component {
     mixins: [TimerMixin];
    
    componentWillMount() {
     const id = this.props.id;   
     const apiKey = this.props.readApiKey;
     //windowsStore.addWindow("dfsdfsdf");
-    indoorStore.loadIndoor(id,apiKey);
+    outdoorStore.loadOutdoor(id,apiKey);
   }
 
   componentDidMount() {
       const id = this.props.id;   
       const apiKey = this.props.readApiKey;
       
-      setInterval(()=>indoorStore.loadIndoor(id,apiKey),10000);
+      setInterval(()=>outdoorStore.loadOutdoor(id,apiKey),10000);
       
   }
   
@@ -36,7 +36,7 @@ class Indoor extends Component {
    
                     <View style={stylesLocal.temperatureCard}>
                         <Text style={{color: 'white'}}>Current Indoor Temperature</Text>
-                        {detailsStore.isIndoorLoading?
+                        {detailsStore.isOutdoorLoading?
                             <ActivityIndicator
                                 animating={true}
                                 style={[stylesLocal.centering, {height: 80}]}
@@ -44,7 +44,7 @@ class Indoor extends Component {
                                 color="#00aa00"
                                 />
                             :
-                                <Text style={{flex:1,color: 'white',fontWeight: 'bold', alignItems: 'center',justifyContent: 'center', margin:10}}>{indoorTemp} &deg;{unit}</Text>
+                                <Text style={{flex:1,color: 'white',fontWeight: 'bold', alignItems: 'center',justifyContent: 'center', margin:10}}>{outdoorTemp} &deg;{unit}</Text>
                             }
                         
                     </View>
@@ -67,4 +67,4 @@ const stylesLocal = StyleSheet.create({
 
 
 //make this component available to the app
-export default Indoor;
+export default Outdoor;
