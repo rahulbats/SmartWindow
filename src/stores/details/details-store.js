@@ -73,13 +73,16 @@ class DetailsStore {
                 console.error(error);
             });
   }  
-  @action loadDesired(id,apiKey) {
+  @action loadDesired(id,apiKey,setSlider) {
         this.pendingDesiredRequestCount++;
          this.desiredTemp = 20;
          fetch('https://api.thingspeak.com/channels/'+id+'/fields/3/last.json?api_key='+apiKey)
             .then((response) => response.json())
             .then((responseJson) => {
                 this.desiredTemp = Number(responseJson.field3);
+                if(setSlider) {
+                  this.sliderTemp = Number(responseJson.field3);
+                }
                 this.pendingDesiredRequestCount--;
             })
             .catch((error) => {

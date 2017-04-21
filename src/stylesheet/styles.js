@@ -4,12 +4,12 @@ const styles = StyleSheet.create({
         flex: 1,
         //justifyContent: 'center',
         alignItems: 'center',
-        marginTop:60,
+        position: 'absolute',
+        top: 100,
         //backgroundColor: '#f1f1f1'
     },
     heading: {
-        height: 80,
-        justifyContent: 'center',
+        flex:1,
         alignItems: 'center',
         //borderBottomWidth: 1,
         //borderBottomColor: 'white'
@@ -19,12 +19,14 @@ const styles = StyleSheet.create({
         fontWeight: 'bold'
     },
     input: {
+        flex:1,
         alignSelf: 'stretch',
         //textAlign: 'center',
         marginBottom: 20,
         borderRadius:2,
         paddingLeft: 10,
-        height: 30
+        height: 30,
+        backgroundColor: 'rgba(255,255,255,0.7)'
     },
     button: {
         alignSelf: 'stretch',
@@ -43,12 +45,12 @@ const styles = StyleSheet.create({
         top: 0
     } ,
   navigationBar:{
-    backgroundColor: '#2A8CEF'
+    //backgroundColor: 'rgba(255,255,255,0.7)'
   },
    navBarText: {
     fontSize: 16,
     marginVertical: 10,
-    color: "white",
+    color: "#000",
   },
   navBarTitleText: {
     fontWeight: '500',

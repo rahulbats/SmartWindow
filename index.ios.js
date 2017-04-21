@@ -47,7 +47,6 @@ export default class SmartWindow extends Component {
         renderScene={this.renderScene.bind(this)}
         initialRoute={{
           name: 'tsinit',
-          title: 'Connect to thingspeak',
           passProps: {
             store: initStore
           }
@@ -67,7 +66,6 @@ export default class SmartWindow extends Component {
 }
 var NavigationBarRouteMapper = { 
   LeftButton: function( route, navigator, index, navState ){
-    
    if(index > 0) {
       return (
        <Button

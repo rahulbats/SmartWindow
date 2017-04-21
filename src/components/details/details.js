@@ -16,13 +16,12 @@ class Details extends Component {
     const id = this.props.id;   
     const apiKey = this.props.readApiKey;
     //windowsStore.addWindow("dfsdfsdf");
-    detailsStore.loadDesired(id,apiKey);
+    detailsStore.loadDesired(id,apiKey,true);
     detailsStore.loadIndoor(id,apiKey);
     detailsStore.loadOutdoor(id,apiKey);
     detailsStore.loadSmart(id,apiKey);
-    const { desiredTemp } = detailsStore;
     detailsStore.loadOpened(id, apiKey);
-    detailsStore.setSlider( desiredTemp);
+    
   }
   componentDidMount() {
       const id = this.props.id;   
@@ -47,7 +46,7 @@ class Details extends Component {
         const { smart } = detailsStore;
         const { open } = detailsStore;
            
-       
+        const unit ="C";
         return (
    
             <View style={styles.container}>
@@ -63,7 +62,7 @@ class Details extends Component {
                                                     color="#00aa00"
                                                     />
                                                 :
-                                                    <Text style={{flex:1,color: 'white',fontWeight: 'bold', alignItems: 'center',justifyContent: 'center', margin:10}}>{indoorTemp}</Text>
+                                                    <Text style={{flex:1,color: 'white',fontWeight: 'bold', alignItems: 'center',justifyContent: 'center', margin:10}}>{indoorTemp} &deg;{unit}</Text>
                                                 }
                                             
                                         </View>
@@ -77,29 +76,34 @@ class Details extends Component {
                                                     color="#00aa00"
                                                     />
                                                 :
-                                            <Text style={{flex:1,color: 'white', fontWeight: 'bold', alignItems: 'center', justifyContent: 'center', margin:10}}>{outdoorTemp}</Text>
+                                            <Text style={{flex:1,color: 'white', fontWeight: 'bold', alignItems: 'center', justifyContent: 'center', margin:10}}>{outdoorTemp} &deg;{unit}</Text>
                                             }
                                         </View>
                                     </View>
                            </View>  
 
                            <View style={[styles.card,{flex: 2}]}>
-                                <Text style={[styles.text, {margin:10}]} > Desired Temperature: {desiredTemp}</Text>    
+                                    
                                 {detailsStore.isDesiredLoading?
-                                                <ActivityIndicator
+                                    <ActivityIndicator
                                                     animating={true}
                                                     style={[stylesLocal.centering, {height: 80}]}
                                                     size="large"
                                                     color="#00aa00"
-                                                    />
-                                                :
-                                <Slider minimumValue={10} maximumValue={100} step={1} value={sliderTemp} onValueChange={(value) => detailsStore.setSlider(value)} /> 
-                                }
+                                                    />        
+                                                    :
+                                    <Text style={[styles.text, {margin:10}]} > Desired Temperature: {desiredTemp} &deg;{unit}</Text>
+                                                    
+                                }                
+                                    <Slider minimumValue={10} maximumValue={100} step={1} value={sliderTemp} onValueChange={(value) => detailsStore.setSlider(value)} />
+                                            
+                                    
+                                
                                 {detailsStore.isDesiredDifferentFromSlider &&
                                     <View style={{flex:1, flexDirection:"row"}}>
                                         <Button
                                             onPress = {()=>detailsStore.setDesired(id, )}
-                                            title={"Set to "+sliderTemp}
+                                            title={"Set to "+sliderTemp+" "+unit}
                                             color="#841584"
                                             accessibilityLabel="Set the desired temperature"
                                             style={{flex:1}}
