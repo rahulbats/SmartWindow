@@ -1,6 +1,6 @@
 //import liraries
 import React, { Component } from 'react';
-import { View, Text, StyleSheet, TextInput, Button, Image, Keyboard, AsyncStorage, Dimensions } from 'react-native';
+import { View, Text, StatusBar, StyleSheet, TextInput, Button, Image, Keyboard, AsyncStorage, Dimensions } from 'react-native';
 import {observer } from "mobx-react/native";
 import {WindowList} from "../list/list"
 //import styles from '../../stylesheet/styles';
@@ -56,7 +56,11 @@ class TsInit extends Component {
         return (
    
                             <View style={{flex:.8}}>
-                              
+                            <StatusBar
+                                backgroundColor="blue"
+                                barStyle="light-content"
+                                hidden={true}
+                            />         
                             <Image style={styles.backgroundpic} source={require('../../images/window-photo.jpeg')} resizeMode='stretch'>
                                      <View style={{flex:2}}></View>  
                                      <Image style={{flex:1,alignSelf:'center'}} source={require('../../images/Logo.png')} resizeMode='contain'/>
@@ -70,6 +74,7 @@ class TsInit extends Component {
                                                     value={apiKey}
                                                     placeholder="Thingspeak API key"
                                                     maxLength={20}
+                                                    underlineColorAndroid={'transparent'}
                                                 />
                                                    <View style={styles.button}>
                                                     <Button
