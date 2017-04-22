@@ -39,12 +39,11 @@ class Indoor extends Component {
                         {indoorStore.isIndoorLoading?
                             <ActivityIndicator
                                 animating={true}
-                                style={[stylesLocal.centering, {height: 80}]}
-                                size="large"
-                                color="#00aa00"
+                                size="small"
+                                color="white"
                                 />
                             :
-                                <Text style={{flex:1,color: 'white',fontWeight: 'bold', alignItems: 'center',justifyContent: 'center', margin:10}}>
+                                <Text style={{color: 'white',fontWeight: 'bold', alignItems: 'center',justifyContent: 'center', margin:10}}>
                                     {indoorStore.getIndoorTemp} &deg;{unit}
                                 </Text>
                             }
@@ -58,11 +57,11 @@ class Indoor extends Component {
 const stylesLocal = StyleSheet.create({
     temperatureCard:{
         flex:1, 
-        height:100,
         padding:5,
         backgroundColor:'#2ad', 
         margin:5,
-        borderRadius: 3
+        borderRadius: 3,
+        flexDirection: 'column'
     }
     
 });
