@@ -34,16 +34,16 @@ class Smart extends Component {
         return (
                     <View style={[styles.card,{flex: 1,flexDirection: 'row'}]}>
                     <Text  style={{flex:1}}>{smart?"smart window is on":"smart window is off"}</Text>  
-                                {detailsStore.isSmartLoading?
+                                {smartStore.isSmartLoading?
                                                 <ActivityIndicator
                                                     animating={true}
-                                                    style={[stylesLocal.centering, {height: 80}]}
+                                                    style={{height: 80}}
                                                     size="large"
                                                     color="#00aa00"
                                                     />
                                                 :
                                 <Switch 
-                                    onValueChange={(value) => detailsStore.setSmart(value)}
+                                    onValueChange={(value) => smartStore.setSmart(value)}
                                     style={{marginBottom: 10,flex:1}}
                                     value={smart} />
                                 }
@@ -52,18 +52,6 @@ class Smart extends Component {
     }
 }
 
-const stylesLocal = StyleSheet.create({
-    temperatureCard:{
-        flex:1, 
-        height:100,
-        padding:5,
-        backgroundColor:'#2ad', 
-        margin:5,
-        borderRadius: 3
-    }
-    
-});
-
 
 //make this component available to the app
-export default Outdoor;
+export default Smart;

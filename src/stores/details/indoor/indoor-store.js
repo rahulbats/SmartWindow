@@ -1,5 +1,5 @@
-import {observable, action, computed} from "mobx"
-
+import {observable, action, computed} from "mobx";
+import detailsStore from "../details-store";
 class IndoorStore {
     @observable indoorTemp = 20;
     @observable pendingIndoorRequestCount = 0;
@@ -9,7 +9,14 @@ class IndoorStore {
 		return this.pendingIndoorRequestCount > 0;
 	}
 
- 
+ @computed get getIndoorTemp() {
+		return detailsStore.unit === 'C'?this.indoorTemp:Math.round((this.indoorTemp * 1.8)+32);
+	}
+
+  @action setUnit(value) {
+        this.unit = value;
+    }
+
 
   @action loadIndoor(id,apiKey) {
         this.pendingIndoorRequestCount++;

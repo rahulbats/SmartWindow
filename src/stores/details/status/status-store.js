@@ -1,24 +1,24 @@
 import {observable, action, computed} from "mobx"
 
 class StatusStore {
-    @observable smart = true;
-    @observable pendingSmartRequestCount = 0;
+    @observable open = true;
+    @observable pendingStatusRequestCount = 0;
     
   
-    @computed get isSmartLoading() {
-     return this.pendingSmartRequestCount > 0;
+    @computed get isStatusLoading() {
+     return this.pendingStatusRequestCount > 0;
 	}
 
  
 
-  @action loadSmart(id,apiKey) {
-        this.pendingSmartRequestCount++;
-         this.smart = false;
-         fetch('https://api.thingspeak.com/channels/'+id+'/fields/5/last.json?api_key='+apiKey)
+  @action loadStatus(id,apiKey) {
+        this.pendingStatusRequestCount++;
+         this.open = true;
+         fetch('https://api.thingspeak.com/channels/'+id+'/fields/2/last.json?api_key='+apiKey)
             .then((response) => response.json())
             .then((responseJson) => {
-                this.smart = responseJson.field5==="0"?false:true;
-                this.pendingSmartRequestCount--;
+                this.open = responseJson.field2==="0"?false:true;
+                this.pendingStatusRequestCount--;
             })
             .catch((error) => {
                 console.error(error);
@@ -26,11 +26,11 @@ class StatusStore {
   }
 
   
-  @action setSmart(value) {
-		return this.smart = value ;
+  @action setStatus(value) {
+		return this.open = value ;
 	}  
    
 }
-var smartStore = new SmartStore;
+var statusStore = new StatusStore;
 
-export default smartStore;
+export default statusStore;

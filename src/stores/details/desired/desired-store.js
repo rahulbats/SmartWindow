@@ -1,13 +1,36 @@
 import {observable, action, computed} from "mobx"
+import detailsStore from "../details-store";
 
 class DesiredStore {
     @observable desiredTemp = 20;
     @observable pendingDesiredRequestCount = 0;
     @observable sliderTemp = 50;
-  
+    @observable minTemp = 10;
+    @observable maxTemp = 50;
+
    @computed get isDesiredLoading() {
 		return this.pendingDesiredRequestCount > 0;
 	}
+
+  @computed get getDesiredTemp() {
+		return detailsStore.unit === 'C'?this.desiredTemp:Math.round((this.desiredTemp * 1.8)+32);
+	}
+
+  @computed get getSliderTemp() {
+		return detailsStore.unit === 'C'?this.sliderTemp:Math.round((this.sliderTemp * 1.8)+32);
+	}
+
+  @computed get getMinTemp() {
+		return detailsStore.unit === 'C'?this.minTemp:Math.round((this.minTemp * 1.8)+32);
+	}
+
+  @computed get getMaxTemp() {
+		return detailsStore.unit === 'C'?this.maxTemp:Math.round((this.maxTemp * 1.8)+32);
+	}
+
+  @action setUnit(value) {
+        this.unit = value;
+    }
 
 
  
@@ -44,6 +67,25 @@ class DesiredStore {
   @computed get isDesiredDifferentFromSlider() {
 		return this.sliderTemp !== this.desiredTemp;
 	}
+
+  @action setDesired(id, apiKey, value) {
+    this.pendingDesiredRequestCount++;
+    fetch("https://api.thingspeak.com/update", {
+      method: 'POST',
+      body: {api_key:apiKey, field3:value}
+    })
+    .then((data) => {
+              if(data!=="0") {
+                this.desiredTemp = Number(data);
+              } else {
+                 this.sliderTemp = this.desiredTemp; 
+              }
+            })
+            .catch((error) => {
+                console.error(error);
+            });
+	}
+
 
    
 }

@@ -13,14 +13,14 @@ class Status extends Component {
    componentWillMount() {
     const id = this.props.id;   
     const apiKey = this.props.readApiKey;
-    statusStore.loadSmart(id,apiKey);
+    statusStore.loadStatus(id,apiKey);
   }
 
   componentDidMount() {
       const id = this.props.id;   
       const apiKey = this.props.readApiKey;
       
-      setInterval(()=>statusStore.loadSmart(id,apiKey),10000);
+      setInterval(()=>statusStore.loadStatus(id,apiKey),10000);
       
   }
   
@@ -34,7 +34,7 @@ class Status extends Component {
         return (
                     <View style={[styles.card,{flex: 1, flexDirection: 'row'}]}>          
                                 <Text  style={{flex:1}}>{open?"window is open":"Window is closed"}</Text>   
-                                {statusStore.isOpenLoading?
+                                {statusStore.isStatusLoading?
                                                 <ActivityIndicator
                                                     animating={true}
                                                     style={{height: 80}}
@@ -43,7 +43,7 @@ class Status extends Component {
                                                     />
                                                 :  
                                 <Switch
-                                    onValueChange={(value) => statusStore.setOpen(value)}
+                                    onValueChange={(value) => statusStore.setStatus(value)}
                                     style={{marginBottom: 10,flex:1}}
                                     value={open} /> 
                                 }

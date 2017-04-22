@@ -29,14 +29,14 @@ class Indoor extends Component {
     render() {
         const apiKey  = this.props.writeApiKey;
         const id = this.props.id;
-        const { indoorTemp } = indoorStore;
-       
-        const unit ="C";
+        
+        const unit =this.props.unit;
+        
         return (
    
                     <View style={stylesLocal.temperatureCard}>
                         <Text style={{color: 'white'}}>Current Indoor Temperature</Text>
-                        {detailsStore.isIndoorLoading?
+                        {indoorStore.isIndoorLoading?
                             <ActivityIndicator
                                 animating={true}
                                 style={[stylesLocal.centering, {height: 80}]}
@@ -44,7 +44,9 @@ class Indoor extends Component {
                                 color="#00aa00"
                                 />
                             :
-                                <Text style={{flex:1,color: 'white',fontWeight: 'bold', alignItems: 'center',justifyContent: 'center', margin:10}}>{indoorTemp} &deg;{unit}</Text>
+                                <Text style={{flex:1,color: 'white',fontWeight: 'bold', alignItems: 'center',justifyContent: 'center', margin:10}}>
+                                    {indoorStore.getIndoorTemp} &deg;{unit}
+                                </Text>
                             }
                         
                     </View>

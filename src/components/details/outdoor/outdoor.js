@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { View, Text, StyleSheet, Button, Slider, Switch, ActivityIndicator } from 'react-native';
 import {observer } from "mobx-react/native";
 import styles from '../../../stylesheet/styles';
-import indoorStore  from "../../../stores/details/indoor/indoor-store";
+import outdoorStore  from "../../../stores/details/outdoor/outdoor-store";
 import TimerMixin from 'react-timer-mixin';
 
 
@@ -22,21 +22,19 @@ class Outdoor extends Component {
       const apiKey = this.props.readApiKey;
       
       setInterval(()=>outdoorStore.loadOutdoor(id,apiKey),10000);
-      
   }
   
 
     render() {
         const apiKey  = this.props.writeApiKey;
         const id = this.props.id;
-        const { indoorTemp } = indoorStore;
-       
-        const unit ="C";
+        const unit =this.props.unit;
+        
         return (
    
                     <View style={stylesLocal.temperatureCard}>
-                        <Text style={{color: 'white'}}>Current Indoor Temperature</Text>
-                        {detailsStore.isOutdoorLoading?
+                        <Text style={{color: 'white'}}>Current Outdoor Temperature</Text>
+                        {outdoorStore.isOutdoorLoading?
                             <ActivityIndicator
                                 animating={true}
                                 style={[stylesLocal.centering, {height: 80}]}
@@ -44,7 +42,10 @@ class Outdoor extends Component {
                                 color="#00aa00"
                                 />
                             :
-                                <Text style={{flex:1,color: 'white',fontWeight: 'bold', alignItems: 'center',justifyContent: 'center', margin:10}}>{outdoorTemp} &deg;{unit}</Text>
+                                <Text style={{flex:1,color: 'white',fontWeight: 'bold', alignItems: 'center',justifyContent: 'center', margin:10}}>
+                                    { outdoorStore.getOutdoorTemp }  &deg;{unit}
+
+                                </Text>
                             }
                         
                     </View>

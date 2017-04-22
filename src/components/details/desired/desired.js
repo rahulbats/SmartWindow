@@ -14,39 +14,60 @@ class Desired extends Component {
     const id = this.props.id;   
     const apiKey = this.props.readApiKey;
     //windowsStore.addWindow("dfsdfsdf");
-    desiredStore.loadIndoor(id,apiKey);
+    desiredStore.loadDesired(id,apiKey,true);
   }
 
   componentDidMount() {
       const id = this.props.id;   
       const apiKey = this.props.readApiKey;
       
-      setInterval(()=>desiredStore.loadIndoor(id,apiKey),10000);
-      
+      setInterval(()=>desiredStore.loadDesired(id,apiKey),10000);
   }
   
 
     render() {
         const apiKey  = this.props.writeApiKey;
         const id = this.props.id;
-        const { desiredTemp } = desiredStore;
-       
-        const unit ="C";
+        
+        const unit =this.props.unit;
+        
         return (
    
-                    <View>
-                        {detailsStore.isDesiredLoading?
+                    <View style={{flex:1, flexDirection:'column'}}>
+                        {desiredStore.isDesiredLoading?
                                     <ActivityIndicator
                                                     animating={true}
-                                                    style={[stylesLocal.centering, {height: 80}]}
-                                                    size="large"
+                                                    style={{height: 80}}
+                                                    size="small"
                                                     color="#00aa00"
                                                     />        
                                                     :
-                                    <Text style={[styles.text, {margin:10}]} > Desired Temperature: {desiredTemp} &deg;{unit}</Text>
+                                    <Text style={[styles.text, {margin:10}]} > Desired Temperature: {desiredStore.getDesiredTemp} &deg;{unit}</Text>
                                                     
                                 }                
-                                    <Slider minimumValue={10} maximumValue={100} step={1} value={sliderTemp} onValueChange={(value) => detailsStore.setSlider(value)} />
+                                <Slider minimumValue={desiredStore.getMinTemp} maximumValue={desiredStore.getMaxTemp} step={1} value={desiredStore.sliderTemp} onValueChange={(value) => desiredStore.setSlider(value)} />
+
+                                {desiredStore.isDesiredDifferentFromSlider &&
+                                    <View style={{flex:1, flexDirection:"row"}}>
+                                        <View style={{flex:1}}>
+                                        <Button
+                                            onPress = {()=>desiredStore.setDesired(id )}
+                                            title={"SET TO "+desiredStore.sliderTemp+unit}
+                                            color="#841584"
+                                            accessibilityLabel="Set the desired temperature"
+                                        /> 
+                                        </View>
+                                        <View style={{flex:1, alignItems:'center'}}>
+                                        <Button
+                                            onPress = {()=>desiredStore.resetSlider()}
+                                            title="RESET"
+                                            color="#841584"
+                                            accessibilityLabel="Reset the desired temperature"
+                                        /> 
+                                        </View>
+                                    </View>
+ 
+                                }
                         
                     </View>
             
