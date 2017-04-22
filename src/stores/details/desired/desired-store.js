@@ -28,9 +28,6 @@ class DesiredStore {
 		return detailsStore.unit === 'C'?this.maxTemp:Math.round((this.maxTemp * 1.8)+32);
 	}
 
-  @action setUnit(value) {
-        this.unit = value;
-    }
 
 
  
@@ -61,11 +58,11 @@ class DesiredStore {
 
 
   @action resetSlider() {
-    this.sliderTemp = this.desiredTemp;
+    this.sliderTemp = this.getDesiredTemp;
 	}
 
   @computed get isDesiredDifferentFromSlider() {
-		return this.sliderTemp !== this.desiredTemp;
+		return this.sliderTemp !== this.getDesiredTemp;
 	}
 
   @action setDesired(id, apiKey, value) {
