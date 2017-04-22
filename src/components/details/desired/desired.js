@@ -37,7 +37,6 @@ class Desired extends Component {
                         {desiredStore.isDesiredLoading?
                                     <ActivityIndicator
                                                     animating={true}
-                                                    style={{height: 80}}
                                                     size="small"
                                                     color="#00aa00"
                                                     />        

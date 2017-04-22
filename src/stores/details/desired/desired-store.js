@@ -37,7 +37,7 @@ class DesiredStore {
 
   @action loadDesired(id,apiKey,setSlider) {
         this.pendingDesiredRequestCount++;
-         this.desiredTemp = 20;
+         //this.desiredTemp = 20;
          fetch('https://api.thingspeak.com/channels/'+id+'/fields/3/last.json?api_key='+apiKey)
             .then((response) => response.json())
             .then((responseJson) => {
