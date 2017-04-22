@@ -88,7 +88,7 @@ class TsInit extends Component {
 
                                                 <Text style={styles.headingText}>Welcome to SmartWindow.</Text>
                                                 
-                                                <Text style={styles.headingText}>Connect to thingspeak using your apiKey</Text>
+                                                <Text style={styles.headingText}>Connect to thingspeak.</Text>
                                                  
                                                  <TextInput
                                                     style={styles.input}
@@ -107,7 +107,7 @@ class TsInit extends Component {
                                                         /> 
                                                     
                                                   <TouchableOpacity onPress={() => Linking.openURL('https://thingspeak.com/account/profile')}>
-                                                        <Text style={[styles.headingText,{color:'lightblue', marginTop: 20}]}>No apikey? Get it at thingspeak</Text>
+                                                        <Text style={[styles.headingText,{color:'lightblue', marginTop: 5}]}>No apikey? Get it at thingspeak</Text>
                                                     </TouchableOpacity>      
                                                     </View>            
                                             </View>
@@ -134,7 +134,7 @@ const styles = StyleSheet.create({
         //borderBottomWidth: 1,
         //borderBottomColor: 'white'
         backgroundColor:'transparent',
-        padding: 5
+        //padding: 5
     },
    
     headingText: {
@@ -146,16 +146,15 @@ const styles = StyleSheet.create({
     input: {
         alignSelf: 'stretch',
         backgroundColor: 'rgba(255,255,255,0.7)',
-        marginBottom: 20,
         borderRadius:2,
-        margin: 10,
+        margin: 5,
         padding: 5,
         height: 40
     },
     button: {
         alignSelf: 'stretch',
         //backgroundColor: 'transparent'
-        margin: 10,
+        margin: 5,
     },
     backgroundpic: {
             flex: 1,

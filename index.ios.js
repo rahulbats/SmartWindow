@@ -11,7 +11,9 @@ import {
   Text,
   View,
   Navigator,
-  Button
+  Button,
+  TouchableOpacity,
+  Image
 } from 'react-native';
 import TsInit from './src/components/tsinit/tsinit';
 import initStore from './src/stores/tsinit/tsinit-store';
@@ -68,12 +70,16 @@ var NavigationBarRouteMapper = {
   LeftButton: function( route, navigator, index, navState ){
    if(index > 0) {
       return (
-       <Button
-          color="#841584"
-          onPress={() => { if (index > 0) { navigator.pop() } }}
-          title="back"/>
+       
+              <TouchableOpacity onPress={() => { if (index > 0) { navigator.pop() } }}>
+                <Image
+                    source={require('./src/images/arrow-left.png')}
+                    resizeMode={'contain'} style={{height:40,width:40}}
+                    />
+               </TouchableOpacity>     
+
           );
-         
+       
     } 
     else { return null }
      
