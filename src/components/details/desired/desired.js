@@ -46,7 +46,7 @@ class Desired extends Component {
                                 }                
                                 <Slider minimumValue={desiredStore.getMinTemp} maximumValue={desiredStore.getMaxTemp} step={1} value={desiredStore.sliderTemp} onValueChange={(value) => desiredStore.setSlider(value)} />
 
-                                {desiredStore.isDesiredDifferentFromSlider &&
+                                {!desiredStore.isDesiredDifferentFromSlider &&
                                     <View style={{flex:1, flexDirection:"row"}}>
                                         <View style={{flex:1}}>
                                         <Button
