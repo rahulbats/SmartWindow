@@ -18,6 +18,7 @@ import {
 import TsInit from './src/components/tsinit/tsinit';
 import initStore from './src/stores/tsinit/tsinit-store';
 import WindowList from './src/components/list/list';
+import Add from './src/components/list/add/add';
 import Details from './src/components/details/details';
 import styles from './src/stylesheet/styles';
 
@@ -31,6 +32,9 @@ export default class SmartWindow extends Component {
    }
     else if(route.name == 'details') {
      return <Details navigator={navigator} {...route.passProps} />
+   }
+    else if(route.name == 'add') {
+     return <Add navigator={navigator} {...route.passProps} />
    }
   }
   configureScene (route, routeStack) {
@@ -90,9 +94,24 @@ var NavigationBarRouteMapper = {
     )
   },
   RightButton: function( route, navigator, index, navState ){
-    return(
-      <Text>{ route.rightButton }</Text>
-    )
+    if(route.name == 'windowlist') {
+      return (
+          <Button
+              onPress={() => { navigator.push( {
+                    name: "add",
+                    title: "Add Window",
+                    passProps: {
+                        type: "Modal"
+                    }
+                }
+              ) }}
+              title="Add"
+              color="#3498db"
+              style={{height:20}}
+              accessibilityLabel="Add a window"
+              />  
+      );
+    }
   }
 }
 

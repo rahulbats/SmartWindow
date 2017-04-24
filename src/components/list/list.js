@@ -1,11 +1,9 @@
 //import liraries
 import React, { Component } from 'react';
-import { View, Text, StyleSheet, TextInput, ListView , ActivityIndicator, TouchableOpacity, ScrollView} from 'react-native';
+import { View, Text, StyleSheet, TextInput, ListView , ActivityIndicator, TouchableOpacity} from 'react-native';
 import styles from '../../stylesheet/styles';
 import {observer } from "mobx-react/native";
 import windowsStore from '../../stores/list/list-store';
-
-var sampleArray =["livingroom", "bedroom", "sdff","sdfsfdfsf", "sdxcvxvxcv", "vfeferer", "vreergegfer","vvdvzsdcssdc", "vrrthrthrh", "ertertertt", "rrahul", "vdvdvdf", "werwrw", "vfdfvdfvd", "werwer", "sdasczczx", "rterttet"];
 
 @observer
 class WindowList extends Component {
@@ -14,7 +12,7 @@ class WindowList extends Component {
       return (
         <View>
         <TouchableOpacity 
-                  underlayColor={ "#fff" } style={ styles.card}  onPress={() => this.gotoDetails(rowData.id, rowData.readApiKey, rowData.writeApiKey)}>
+                  underlayColor={ "#fff" } style={ [styles.card , {marginBottom:2, marginTop:2} ]}  onPress={() => this.gotoDetails(rowData.id, rowData.readApiKey, rowData.writeApiKey)}>
 
                  
                     <Text style={{padding: 10}}>{ rowData.name.toUpperCase() }</Text>
@@ -108,7 +106,7 @@ class WindowList extends Component {
 
 const NoList = () => (
   <View style={styles.noList}>
-    <Text style={styles.noListText}>No List, Add List To Get Started</Text>
+    <Text style={styles.noListText}>No Window, Add Window To Get Started</Text>
   </View>
 )
 

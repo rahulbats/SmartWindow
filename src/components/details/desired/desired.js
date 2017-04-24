@@ -21,7 +21,7 @@ class Desired extends Component {
       const id = this.props.id;   
       const apiKey = this.props.readApiKey;
       
-      setInterval(()=>desiredStore.loadDesired(id,apiKey),10000);
+      setInterval(()=>desiredStore.loadDesired(id,apiKey),15000);
   }
   
 
@@ -50,7 +50,7 @@ class Desired extends Component {
                                     <View style={{flex:1, flexDirection:"row"}}>
                                         <View style={{flex:1}}>
                                         <Button
-                                            onPress = {()=>desiredStore.setDesired(id )}
+                                            onPress = {()=>desiredStore.setDesired(apiKey )}
                                             title={"SET TO "+desiredStore.sliderTemp+unit}
                                             color="#841584"
                                             accessibilityLabel="Set the desired temperature"

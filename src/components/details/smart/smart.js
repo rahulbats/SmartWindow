@@ -20,7 +20,7 @@ class Smart extends Component {
       const id = this.props.id;   
       const apiKey = this.props.readApiKey;
       
-      setInterval(()=>smartStore.loadSmart(id,apiKey),10000);
+      setInterval(()=>smartStore.loadSmart(id,apiKey),15000);
       
   }
   
@@ -43,7 +43,7 @@ class Smart extends Component {
                                                     />
                                                 :
                                 <Switch 
-                                    onValueChange={(value) => smartStore.setSmart(value)}
+                                    onValueChange={(value) => smartStore.setSmart(value, apiKey)}
                                     style={{marginBottom: 10,flex:1}}
                                     value={smart} />
                                 }

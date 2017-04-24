@@ -28,7 +28,7 @@ const styles = StyleSheet.create({
         borderRadius:2,
         paddingLeft: 10,
         height: 30,
-        backgroundColor: 'rgba(255,255,255,0.7)'
+        backgroundColor: '#ffffff'
     },
     button: {
         alignSelf: 'stretch',

@@ -21,7 +21,7 @@ class Indoor extends Component {
       const id = this.props.id;   
       const apiKey = this.props.readApiKey;
       
-      setInterval(()=>indoorStore.loadIndoor(id,apiKey),10000);
+      setInterval(()=>indoorStore.loadIndoor(id,apiKey),15000);
       
   }
   

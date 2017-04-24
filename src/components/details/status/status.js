@@ -1,5 +1,11 @@
 import React, { Component } from 'react';
-import { View, Text, StyleSheet, Button, Slider, Switch, ActivityIndicator } from 'react-native';
+import { 
+    View, 
+    Text, 
+    StyleSheet, 
+    Switch, 
+    ActivityIndicator
+ } from 'react-native';
 import {observer } from "mobx-react/native";
 import styles from '../../../stylesheet/styles';
 import statusStore  from "../../../stores/details/status/status-store";
@@ -13,14 +19,14 @@ class Status extends Component {
    componentWillMount() {
     const id = this.props.id;   
     const apiKey = this.props.readApiKey;
-    statusStore.loadStatus(id,apiKey);
+    statusStore.loadStatus(id,apiKey, true);
   }
 
   componentDidMount() {
       const id = this.props.id;   
       const apiKey = this.props.readApiKey;
       
-      setInterval(()=>statusStore.loadStatus(id,apiKey),10000);
+      setInterval(()=>statusStore.loadStatus(id,apiKey),15000);
       
   }
   
@@ -29,10 +35,11 @@ class Status extends Component {
         const apiKey  = this.props.writeApiKey;
         const id = this.props.id;
         const { open } = statusStore;
-       
         const unit ="C";
         return (
-                    <View style={[styles.card,{flex: 1, flexDirection: 'row'}]}>          
+                     
+                    <View style={[styles.card,{flex: 1, flexDirection: 'row'}]}>   
+                                 
                                 <Text  style={{flex:1}}>{open?"window is open":"Window is closed"}</Text>   
                                 {statusStore.isStatusLoading?
                                                 <ActivityIndicator
@@ -43,13 +50,18 @@ class Status extends Component {
                                                     />
                                                 :  
                                 <Switch
-                                    onValueChange={(value) => statusStore.setStatus(value)}
+                                    onValueChange={(value) => {
+                                                statusStore.setStatus(value, this.props.writeApiKey);  
+                                            }
+                                        }
                                     style={{marginBottom: 10,flex:1}}
                                     value={open} /> 
                                 }
                             </View>            
         );
     }
+
+   
 }
 
 

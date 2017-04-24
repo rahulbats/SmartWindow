@@ -65,21 +65,44 @@ class DesiredStore {
 		return this.sliderTemp !== this.getDesiredTemp;
 	}
 
-  @action setDesired(id, apiKey, value) {
+  @action setDesired( apiKey) {
     this.pendingDesiredRequestCount++;
-    fetch("https://api.thingspeak.com/update", {
-      method: 'POST',
-      body: {api_key:apiKey, field3:value}
-    })
-    .then((data) => {
-              if(data!=="0") {
-                this.desiredTemp = Number(data);
-              } else {
-                 this.sliderTemp = this.desiredTemp; 
-              }
+    var temporary = detailsStore.unit === 'C'?this.sliderTemp:Math.round((this.sliderTemp -32)/1.8)
+        fetch("https://api.thingspeak.com/update", {
+            method: 'POST',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                api_key:apiKey,
+                field3:temporary
             })
-            .catch((error) => {
+        })
+        .then((response) => response.json())
+        .then((data) => {
+            if(data===0){
+                Alert.alert(
+                    'Thingspeak returned error',
+                    'You might be updating too quickly. Thingspeak allows 1 update per 15 seconds for free accounts.',
+                    [
+                        {text: 'OK', onPress: () => console.log('OK Pressed!')},
+                    ]
+                );
+            } else {
+                this.desiredTemp = temporary ;
+            }
+            this.pendingDesiredRequestCount--;
+        })
+        .catch((error) => {
                 console.error(error);
+                Alert.alert(
+                    'Thingspeak returned error',
+                    'You might be updating too quickly. Thingspeak throttles free accounts.',
+                    [
+                        {text: 'OK', onPress: () => console.log('OK Pressed!')},
+                    ]
+                );
             });
 	}
 

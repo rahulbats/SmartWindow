@@ -2,7 +2,7 @@
 import React, { Component } from 'react';
 import { View, Text, StatusBar, StyleSheet, 
     TextInput, Button, Image, Keyboard, 
-    AsyncStorage, Dimensions, Animated , 
+    AsyncStorage, Dimensions, Animated , KeyboardAvoidingView,
     Easing, FadeInView, Linking, TouchableOpacity
 } from 'react-native';
 import {observer } from "mobx-react/native";
@@ -61,7 +61,7 @@ class TsInit extends Component {
         this.state.fadeAnim,
         {
             toValue: 1,
-            duration: 5000,
+            duration: 2000,
         }                              
         ).start();                
         this.retrieveApiKey();
@@ -84,7 +84,8 @@ class TsInit extends Component {
                             <Image style={styles.backgroundpic} source={require('../../images/window-photo.jpeg')} resizeMode='stretch'>
                                      <View style={{flex:1}}></View>  
                                      <Image style={{flex:1,alignSelf:'center'}} source={require('../../images/Logo.png')} resizeMode='contain'/>
-                                     <View style={[styles.heading, {flex:1}]}>
+
+                                     <KeyboardAvoidingView behavior={'padding'} style={[styles.heading, {flex:1}]}>
 
                                                 <Text style={styles.headingText}>Welcome to SmartWindow.</Text>
                                                 
@@ -110,7 +111,7 @@ class TsInit extends Component {
                                                         <Text style={[styles.headingText,{color:'lightblue', marginTop: 5}]}>No apikey? Get it at thingspeak</Text>
                                                     </TouchableOpacity>      
                                                     </View>            
-                                            </View>
+                                            </KeyboardAvoidingView>
                                       
                                      
                                     

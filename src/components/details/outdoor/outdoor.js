@@ -21,7 +21,7 @@ class Outdoor extends Component {
       const id = this.props.id;   
       const apiKey = this.props.readApiKey;
       
-      setInterval(()=>outdoorStore.loadOutdoor(id,apiKey),10000);
+      setInterval(()=>outdoorStore.loadOutdoor(id,apiKey),15000);
   }
   
 

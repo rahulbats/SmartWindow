@@ -21,7 +21,7 @@ class Details extends Component {
   
 
     render() {
-        const apiKey  = this.props.writeApiKey;
+        const writeApiKey  = this.props.writeApiKey;
         const readApiKey  = this.props.readApiKey;
         const id = this.props.id;
         const {unit} = detailsStore;
@@ -77,12 +77,12 @@ class Details extends Component {
 
                            <View style={[styles.card,{flex: 2}]}>
                                     
-                                <Desired id={id} readApiKey={readApiKey} unit={unit}/>
+                                <Desired id={id} readApiKey={readApiKey} unit={unit} writeApiKey={writeApiKey}/>
                                
                             </View>
                          
-                            <Smart id={id} readApiKey={readApiKey}/>
-                            <Status id={id} readApiKey={readApiKey}/>
+                            <Smart id={id} readApiKey={readApiKey} writeApiKey={writeApiKey}/>
+                            <Status id={id} readApiKey={readApiKey} writeApiKey={writeApiKey}/>
                             
                             
             </View>
