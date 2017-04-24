@@ -44,14 +44,16 @@ class Add extends Component {
               onChangeText={(text)=>addStore.setLatitude(text)}
               value={latitude}
               placeholder="Latitude"
-              maxLength={20}
+              keyboardType = "numeric"
+              maxLength={6}
             />
           <TextInput
                   style={[styles.input, {height:60}]}
                   onChangeText={(text)=>addStore.setLongitude(text)}
                   value={longtitude}
                   placeholder="Longitude"
-                  maxLength={20}
+                  keyboardType = "numeric"
+                  maxLength={6}
               />   
          </KeyboardAvoidingView>
          <Text style={{flex:1, marginTop:20}}> OR </Text>

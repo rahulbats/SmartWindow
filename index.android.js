@@ -19,6 +19,7 @@ import TsInit from './src/components/tsinit/tsinit';
 import initStore from './src/stores/tsinit/tsinit-store';
 import WindowList from './src/components/list/list';
 import Add from './src/components/list/add/add';
+import Address from './src/components/list/add/address/address';
 import Details from './src/components/details/details';
 import styles from './src/stylesheet/styles';
 
@@ -35,6 +36,9 @@ export default class SmartWindow extends Component {
    }
     else if(route.name == 'add') {
      return <Add navigator={navigator} {...route.passProps} />
+   }
+    else if(route.name == 'address') {
+     return <Address navigator={navigator} {...route.passProps} />
    }
   }
   configureScene (route, routeStack) {
@@ -79,7 +83,7 @@ var NavigationBarRouteMapper = {
                 <Image
                     source={require('./src/images/arrow-left.png')}
                     resizeMode={'contain'} style={{height:40,width:40}}
-                    />
+                     />
                </TouchableOpacity>     
 
           );
@@ -89,9 +93,19 @@ var NavigationBarRouteMapper = {
      
   },
   Title: function( route, navigator, index, navState ){
-    return(
-      <Text style={[styles.navBarText, styles.navBarTitleText]}>{ route.title }</Text>
-    )
+     if(route.name == 'address') {
+        return(
+            <TextInput
+                value={''}
+                placeholder="Window Address"
+            />   
+        );
+     } else {
+        return(
+          <Text style={[styles.navBarText, styles.navBarTitleText]}>{ route.title }</Text>
+        );
+     }
+    
   },
   RightButton: function( route, navigator, index, navState ){
     if(route.name == 'windowlist') {
