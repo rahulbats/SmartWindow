@@ -58,14 +58,14 @@ class Add extends Component {
          <View behavior={'padding'} style={{flex:1, alignSelf:'stretch'}}>
           <TextInput
                     style={[styles.input,{alignSelf:'stretch'}]}
-                    placeholder="Address"
+                    placeholder="Window Address"
                 />   
          </View>
          
             <Button
               onPress = {()=>console.log('button clocked')}
               title="Save"
-              color="green"
+              color="#16a085"
               accessibilityLabel="Save window information"
               />  
         <View style={{flex:2}}/>

@@ -18,7 +18,8 @@ const styles = StyleSheet.create({
     },
    
     headingText: {
-        fontWeight: 'bold'
+        fontWeight: 'bold',
+        color: '#2c3e50'
     },
     input: {
         flex:1,
@@ -52,7 +53,7 @@ const styles = StyleSheet.create({
    navBarText: {
     fontSize: 16,
     marginVertical: 10,
-    color: "#000",
+    color: "#2c3e50",
   },
   navBarTitleText: {
     fontWeight: '500',
