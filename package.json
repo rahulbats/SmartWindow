@@ -15,7 +15,6 @@
     "native-base": "^2.1.1",
     "react": "16.0.0-alpha.6",
     "react-native": "0.43.3",
-    "react-native-form-generator": "^0.9.9",
     "react-timer-mixin": "^0.13.3"
   },
   "devDependencies": {

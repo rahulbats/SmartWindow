@@ -1,9 +1,11 @@
 //import liraries
 import React, { Component } from 'react';
-import { View,KeyboardAvoidingView, Text, StyleSheet, TextInput, Button , ActivityIndicator, TouchableOpacity} from 'react-native';
+import { Picker,View,KeyboardAvoidingView, Text, StyleSheet, TextInput, Button , ActivityIndicator, TouchableOpacity} from 'react-native';
 import styles from '../../../stylesheet/styles';
 import {observer } from "mobx-react/native";
 import addStore from '../../../stores/list/add/add-store';
+import addressStore from '../../../stores/list/add/address/address-store';
+const Item = Picker.Item;
 
 @observer
 class Add extends Component {
@@ -15,8 +17,8 @@ class Add extends Component {
   }
 
   render() {
-    const { name, description, latitude, longtitude } = addStore;
- 
+    const { name, description } = addStore;
+    const { query, latitude, longitude} = addressStore;
 
     return (
        <KeyboardAvoidingView style={[styles.container]}>
@@ -27,40 +29,63 @@ class Add extends Component {
               value={name}
               placeholder="Window Name"
               maxLength={20}
+              returnKeyType={"next"}
+              onSubmitEditing={() => this.refs['SecondInput'].focus()}
           />
          
          <TextInput
-                style={[styles.input,{flex:2}]}
+                
+                style={[styles.input,{flex:1.5,textAlignVertical: 'top'}]}
                 onChangeText={(text)=>addStore.setDescription(text)}
                 value={description}
-                placeholder="Window Description"
+                placeholder="Window Description (Optional)"
                 multiline = {true}
-                numberOfLines = {4}
+                numberOfLines = {3}
+                
             />   
          
-         <KeyboardAvoidingView behavior={'padding'} style={{ flex:1,flexDirection:'row'}}>
+         <View behavior={'padding'} style={{ flex:1,flexDirection:'row'}}>
+           
             <TextInput
-              style={[styles.input, {height:60}]}
-              onChangeText={(text)=>addStore.setLatitude(text)}
+              ref='SecondInput'
+              style={[styles.input, {height:60, marginLeft:10, marginRight:5}]}
+              onChangeText={(text)=>addressStore.setLatitude(text)}
               value={latitude}
               placeholder="Latitude"
-              keyboardType = "numeric"
+              keyboardType = "numbers-and-punctuation"
+              returnKeyType={"done"}
               maxLength={6}
+              returnKeyType={"next"}
+              onSubmitEditing={() => this.refs['ThirdInput'].focus()}
             />
           <TextInput
-                  style={[styles.input, {height:60}]}
-                  onChangeText={(text)=>addStore.setLongitude(text)}
-                  value={longtitude}
+                  ref='ThirdInput'
+                  style={[styles.input, {height:60, marginLeft:5, marginRight: 10}]}
+                  onChangeText={(text)=>addressStore.setLongitude(text)}
+                  value={longitude}
                   placeholder="Longitude"
-                  keyboardType = "numeric"
+                  keyboardType = "numbers-and-punctuation"
+                  returnKeyType={"done"}
                   maxLength={6}
+                  
               />   
-         </KeyboardAvoidingView>
+         </View>
          <Text style={{flex:1, marginTop:20}}> OR </Text>
          <View behavior={'padding'} style={{flex:1, alignSelf:'stretch'}}>
           <TextInput
                     style={[styles.input,{alignSelf:'stretch'}]}
                     placeholder="Window Address"
+                    value={query}
+                    onFocus={()=>{
+                      this.props.navigator.push( {
+                              name: "address",
+                              title: "Window Address",
+                              passProps: {
+                                  type: "Bottom"
+                              }
+                          }
+                      );
+                    }}
                 />   
          </View>
          
@@ -78,7 +103,13 @@ class Add extends Component {
 }
 
 
-
+const stylesLocal = StyleSheet.create({
+  picker: {
+    width: 10,
+    flex:1,
+    margin:-10
+  },
+});
 
 //make this component available to the app
 export default Add;

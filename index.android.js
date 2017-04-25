@@ -13,15 +13,19 @@ import {
   Navigator,
   Button,
   TouchableOpacity,
-  Image
+  Image,
+  TextInput
 } from 'react-native';
 import TsInit from './src/components/tsinit/tsinit';
 import initStore from './src/stores/tsinit/tsinit-store';
+import addressStore from './src/stores/list/add/address/address-store';
 import WindowList from './src/components/list/list';
 import Add from './src/components/list/add/add';
-import Address from './src/components/list/add/address/address';
 import Details from './src/components/details/details';
 import styles from './src/stylesheet/styles';
+import Address from './src/components/list/add/address/address';
+import Search from './src/components/list/add/address/search';
+
 
 export default class SmartWindow extends Component {
   renderScene (route, navigator) {
@@ -37,12 +41,12 @@ export default class SmartWindow extends Component {
     else if(route.name == 'add') {
      return <Add navigator={navigator} {...route.passProps} />
    }
-    else if(route.name == 'address') {
+   else if(route.name == 'address') {
      return <Address navigator={navigator} {...route.passProps} />
    }
   }
   configureScene (route, routeStack) {
-    if (route.type === 'Modal') {
+    if (route.passProps.type === 'Bottom') {
       return Navigator.SceneConfigs.FloatFromBottom
     }
     return Navigator.SceneConfigs.PushFromRight
@@ -83,7 +87,7 @@ var NavigationBarRouteMapper = {
                 <Image
                     source={require('./src/images/arrow-left.png')}
                     resizeMode={'contain'} style={{height:40,width:40}}
-                     />
+                    />
                </TouchableOpacity>     
 
           );
@@ -93,19 +97,17 @@ var NavigationBarRouteMapper = {
      
   },
   Title: function( route, navigator, index, navState ){
-     if(route.name == 'address') {
+    
+    if(route.name == 'address') {
+      
         return(
-            <TextInput
-                value={''}
-                placeholder="Window Address"
-            />   
+            <Search/>
         );
      } else {
         return(
           <Text style={[styles.navBarText, styles.navBarTitleText]}>{ route.title }</Text>
         );
      }
-    
   },
   RightButton: function( route, navigator, index, navState ){
     if(route.name == 'windowlist') {
@@ -115,7 +117,7 @@ var NavigationBarRouteMapper = {
                     name: "add",
                     title: "Add Window",
                     passProps: {
-                        type: "Modal"
+                        type: "Scene"
                     }
                 }
               ) }}
