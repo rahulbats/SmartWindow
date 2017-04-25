@@ -17,7 +17,8 @@ class Search extends Component {
                 value={query}
                 onChangeText={(value)=>addressStore.setQuery(value, true)}
                 style={{marginLeft:45, 
-                        height: 35,borderRadius:10,
+                        marginBottom: 10,borderRadius:10,
+                        flex:1, alignSelf:'stretch',
                         paddingLeft: 15, marginRight: 20, 
                         backgroundColor: '#f1f1f1',}}
                 placeholder="Window Address"

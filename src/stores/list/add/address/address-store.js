@@ -3,13 +3,16 @@ import {observable, action, computed} from "mobx";
 class AddressStore {
     @observable googleApiKey = 'AIzaSyDPG796HfnBlTJ5iQTEs7nJA1XlvFdnFmw';
     @observable query = '';
-    @observable address = '';
     @observable latitude = '';
     @observable longitude = '';
     @observable suggestions = [];
     
     @action setGoogleApiKey(value) {
         this.googleApiKey = value;
+    }
+
+    @action setSuggestion(value) {
+        this.suggestions = value;
     }
 
     @action setQuery(value, loadSuggestions) {
@@ -29,9 +32,7 @@ class AddressStore {
         }
     }
 
-    @action setAddress(value) {
-        this.address = value;
-    }
+    
 
     @action setLatitude(value) {
         this.latitude = ''+value;
