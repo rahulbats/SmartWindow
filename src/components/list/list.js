@@ -17,7 +17,7 @@ class WindowList extends Component {
                  
                     <Text style={{padding: 10}}>{ rowData.name.toUpperCase() }</Text>
                     
-              
+                    <Text style={{paddingLeft: 10, color:'grey'}}>ID: { rowData.id }</Text>
    
 
         </TouchableOpacity>

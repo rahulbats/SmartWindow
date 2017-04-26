@@ -37,7 +37,7 @@ class Address extends Component {
     navigator.geolocation.watchPosition((position) => {
       addressStore.setCurrentPosition({formatted_address:'Current Location', geometry:{location:{lng:position.coords.longitude,lat:position.coords.latitude}}});
     });
-    addressStore.loadSuggestions();
+    
   }
 
   renderRow(rowData, sectionID, rowID) {
@@ -47,7 +47,7 @@ class Address extends Component {
         <TouchableOpacity 
                   underlayColor={ "#fff" } style={  {flex:1,alignSelf: 'stretch', backgroundColor:'white'} }  
                   onPress={() => this.populateLatLongAddress(rowData.geometry.location.lat, rowData.geometry.location.lng,  rowData.formatted_address)}>
-
+                     <View style={{height:1, backgroundColor: 'gray'}}/>
                  
                     <Text style={{padding: 20}}>{ rowData.formatted_address}</Text>
                     
@@ -66,10 +66,16 @@ class Address extends Component {
     const { suggestions } = addressStore;
     const ds = new ListView.DataSource({ rowHasChanged: (r1, r2) => r1 !== r2 });
     const dataSource = ds.cloneWithRows(suggestions.slice());
-    
+    //console.log(suggestions.slice());
      return (
-       <View style={styles.container}>
-         <ListView keyboardShouldPersistTaps="always" enableEmptySections={true} dataSource={ dataSource } renderRow={this.renderRow.bind(this)} style={{flex:3,alignSelf: 'stretch'}}></ListView>
+       <View style={[styles.container,{paddingTop: 0}]}>
+       <ListView keyboardShouldPersistTaps="always" enableEmptySections={true} dataSource={ dataSource } renderRow={this.renderRow.bind(this)} style={{flex:3,alignSelf: 'stretch'}}></ListView>
+        
+         
+         {/*suggestions.map((suggestion)=>{
+           console.log(suggestion.stringify);
+           <Text>{suggestion.stringify}</Text>
+         })*/}
        </View>
      );
   }

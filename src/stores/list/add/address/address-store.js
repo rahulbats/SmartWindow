@@ -5,8 +5,9 @@ class AddressStore {
     @observable query = '';
     @observable latitude = '';
     @observable longitude = '';
-    @observable suggestions = [{formatted_address:'Current Location', geometry:{location:{lng:-97,lat:33}}}];
-    @observable currentPosition = null;
+    
+    @observable currentPosition = {formatted_address:'Current Location', geometry:{location:{lng:-97,lat:33}}};
+    @observable suggestions = [this.currentPosition];
 
     /*@action setGoogleApiKey(value) {
         this.googleApiKey = value;
@@ -14,25 +15,20 @@ class AddressStore {
 
     @action setQuery(value, loadSuggestions) {
         this.query = value;
-        if(loadSuggestions)
+        if(loadSuggestions && this.query.length>3)
             this.loadSuggestions(value);
-        
+        else
+            this.initSuggestion();
     }
     
     @action loadSuggestions() {
-        if(this.query.length>3) {
+        
             fetch('https://maps.googleapis.com/maps/api/place/textsearch/json?query='+this.query+'&key='+apiKeys.googleApiKey)
             .then((response) => response.json())
             .then((responseJson) => {
                     this.suggestions = responseJson.results;
             });
-        } else {
-            if(this.currentPosition!=null) {
-                    this.suggestions = [];
-                    this.suggestions.push(this.currentPosition);
-            }
-            
-        }
+        
     }
 
     @action initSuggestion() {
@@ -52,7 +48,6 @@ class AddressStore {
         this.longitude = ''+value;
     }
 
-    
     
 }
 
