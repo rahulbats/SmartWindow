@@ -1,6 +1,6 @@
 //import liraries
 import React, { Component } from 'react';
-import { View, Text, StyleSheet, TextInput, ListView , ActivityIndicator, TouchableOpacity} from 'react-native';
+import { View, Text, StyleSheet, TextInput, ListView , ActivityIndicator, TouchableOpacity, Image} from 'react-native';
 import styles from '../../stylesheet/styles';
 import {observer } from "mobx-react/native";
 import windowsStore from '../../stores/list/list-store';
@@ -14,10 +14,12 @@ class WindowList extends Component {
         <TouchableOpacity 
                   underlayColor={ "#fff" } style={ [styles.card , {marginBottom:2, marginTop:2} ]}  onPress={() => this.gotoDetails(rowData.id, rowData.readApiKey, rowData.writeApiKey)}>
 
-                 
-                    <Text style={{padding: 10}}>{ rowData.name.toUpperCase() }</Text>
+                 <View style={{flex:1, flexDirection:'row'}}>
+                    <Text style={{padding: 10, flex:1, alignSelf: 'flex-start'}}>{ rowData.name.toUpperCase() }</Text>
                     
-                    <Text style={{paddingLeft: 10, color:'grey'}}>ID: { rowData.id }</Text>
+                     <Image style={{flex:1,alignSelf:'flex-end', height:30, width:50, marginTop:10}} source={require('../../images/pencil-icon.png')} resizeMode='contain'  onPress={() => this.gotoEdit(rowData.id)}/>
+                  </View>    
+                  <Text style={{paddingLeft: 10, color:'grey'}}>ID: { rowData.id }</Text>
    
 
         </TouchableOpacity>
@@ -25,6 +27,17 @@ class WindowList extends Component {
          
       );
   }
+
+ gotoEdit =(id) => {
+      navigator.push( {
+                    name: "add",
+                    title: "Add Window",
+                    passProps: {
+                        type: "Scene"
+                    }
+                }
+              ); 
+ };
 
   gotoDetails = (id, readKey, writeKey) => {
       this.props.navigator.push( {
