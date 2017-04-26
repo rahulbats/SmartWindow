@@ -28,16 +28,20 @@ class Address extends Component {
     navigator.geolocation.getCurrentPosition(
       (position) => {
         var currentPosition = JSON.stringify(position);
-        addressStore.setSuggestion([{formatted_address:'Current Location', geometry:{location:{lng:position.coords.longitude,lat:position.coords.latitude}}}]);
- 
+        addressStore.setCurrentPosition({formatted_address:'Current Location', geometry:{location:{lng:position.coords.longitude,lat:position.coords.latitude}}});
+        addressStore.initSuggestion();
       },
       (error) => alert(JSON.stringify(error)),
       {enableHighAccuracy: true, timeout: 20000, maximumAge: 1000}
     );
-    
+    navigator.geolocation.watchPosition((position) => {
+      addressStore.setCurrentPosition({formatted_address:'Current Location', geometry:{location:{lng:position.coords.longitude,lat:position.coords.latitude}}});
+    });
+    addressStore.loadSuggestions();
   }
 
   renderRow(rowData, sectionID, rowID) {
+      
       return (
         <View>
         <TouchableOpacity 

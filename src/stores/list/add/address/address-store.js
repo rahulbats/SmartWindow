@@ -1,19 +1,16 @@
 import {observable, action, computed} from "mobx";
-
+import apiKeys from "../../../../apikeys/apikeys"
 class AddressStore {
-    @observable googleApiKey = 'AIzaSyDPG796HfnBlTJ5iQTEs7nJA1XlvFdnFmw';
+    //@observable googleApiKey = 'AIzaSyDPG796HfnBlTJ5iQTEs7nJA1XlvFdnFmw';
     @observable query = '';
     @observable latitude = '';
     @observable longitude = '';
-    @observable suggestions = [];
-    
-    @action setGoogleApiKey(value) {
-        this.googleApiKey = value;
-    }
+    @observable suggestions = [{formatted_address:'Current Location', geometry:{location:{lng:-97,lat:33}}}];
+    @observable currentPosition = null;
 
-    @action setSuggestion(value) {
-        this.suggestions = value;
-    }
+    /*@action setGoogleApiKey(value) {
+        this.googleApiKey = value;
+    }*/
 
     @action setQuery(value, loadSuggestions) {
         this.query = value;
@@ -22,18 +19,31 @@ class AddressStore {
         
     }
     
-    @action loadSuggestions(value) {
-        if(value.length>3) {
-            fetch('https://maps.googleapis.com/maps/api/place/textsearch/json?query='+value+'&key='+this.googleApiKey)
+    @action loadSuggestions() {
+        if(this.query.length>3) {
+            fetch('https://maps.googleapis.com/maps/api/place/textsearch/json?query='+this.query+'&key='+apiKeys.googleApiKey)
             .then((response) => response.json())
             .then((responseJson) => {
                     this.suggestions = responseJson.results;
             });
+        } else {
+            if(this.currentPosition!=null) {
+                    this.suggestions = [];
+                    this.suggestions.push(this.currentPosition);
+            }
+            
         }
     }
 
-    
+    @action initSuggestion() {
+        this.suggestions = [];
+        this.suggestions.push(this.currentPosition);
+    }
+    @action setCurrentPosition(value) {
+        this.currentPosition = value;
+    }
 
+    
     @action setLatitude(value) {
         this.latitude = ''+value;
     }
@@ -42,7 +52,7 @@ class AddressStore {
         this.longitude = ''+value;
     }
 
-
+    
     
 }
 
