@@ -13,14 +13,7 @@ class Address extends Component {
       addressStore.setLongitude(long);
       addressStore.setQuery(formatted_address, false);
 
-     this.props.navigator.push( {
-                    name: "add",
-                    title: "Add Window",
-                    passProps: {
-                        type: "Scene"
-                    }
-                }
-              );    
+     this.props.navigator.pop();    
 
   }
 

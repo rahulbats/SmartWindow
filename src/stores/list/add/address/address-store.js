@@ -9,7 +9,7 @@ class AddressStore {
     @observable currentPosition = {formatted_address:'Current Location', geometry:{location:{lng:-97,lat:33}}};
     @observable suggestions = [this.currentPosition];
     lastCallTime = new Date();
-    API_DEBOUNCE_TIME = 2000;
+    API_DEBOUNCE_TIME = 5000;
     /*@action setGoogleApiKey(value) {
         this.googleApiKey = value;
     }*/
@@ -43,11 +43,11 @@ class AddressStore {
 
     
     @action setLatitude(value) {
-        this.latitude = ''+value;
+        this.latitude = ''+Number(value).toFixed(2);
     }
 
     @action setLongitude(value) {
-        this.longitude = ''+value;
+        this.longitude = ''+Number(value).toFixed(2);
     }
 
     

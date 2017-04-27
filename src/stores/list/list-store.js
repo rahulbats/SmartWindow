@@ -1,4 +1,5 @@
 import {observable, action, computed} from "mobx";
+import initStore from '../tsinit/tsinit-store';
 
 class WindowsStore {
     @observable windows = [];
@@ -8,11 +9,11 @@ class WindowsStore {
 		return this.pendingRequestCount > 0;
 	}
 
-    @action loadWindows(apiKey){
+    @action loadWindows(){
          this.pendingRequestCount++;
          this.windows = [];
          var temp =[];
-         fetch('https://thingspeak.com/channels.json?api_key='+apiKey)
+         fetch('https://thingspeak.com/channels.json?api_key='+initStore.apiKey)
             .then((response) => response.json())
             .then((responseJson) => {
                 responseJson.forEach(channel=>{
@@ -26,7 +27,10 @@ class WindowsStore {
                             writeKey = apiKey.api_key;
                         }
                     });
-                    temp.push({name: channel.name, id:channel.id ,readApiKey: readKey, writeApiKey: writeKey});
+                    temp.push({name: channel.name, id:channel.id, description: channel.description, 
+                         latitude: channel.latitude,
+                         longitude: channel.longitude,
+                         readApiKey: readKey, writeApiKey: writeKey});
                     
                 });
                 this.windows.replace(temp);
@@ -36,6 +40,35 @@ class WindowsStore {
             })
             .catch((error) => {
                 console.error(error);
+            });
+    }
+
+    @action deleteWindow(id){
+         this.pendingRequestCount++;
+         fetch("https://api.thingspeak.com/channels/"+id+".json", {
+            method: 'DELETE',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                api_key:initStore.apiKey
+            })
+        })
+        .then((response) => response.json())
+        .then((responseJson) => {
+            this.pendingRequestCount--;
+            this.loadWindows();
+        })
+        .catch((error) => {
+                this.data=0;
+                Alert.alert(
+                    'Thingspeak returned error',
+                    'You might be updating too quickly. Thingspeak allows 1 update per 15 seconds for free accounts. Try again in few.',
+                    [
+                        {text: 'OK', onPress: () => console.log('OK Pressed!')},
+                    ]
+                );
             });
     }
 

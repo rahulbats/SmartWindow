@@ -18,6 +18,7 @@ import {
 } from 'react-native';
 import TsInit from './src/components/tsinit/tsinit';
 import initStore from './src/stores/tsinit/tsinit-store';
+import addStore from './src/stores/list/add/add-store';
 import addressStore from './src/stores/list/add/address/address-store';
 import WindowList from './src/components/list/list';
 import Add from './src/components/list/add/add';
@@ -112,8 +113,15 @@ var NavigationBarRouteMapper = {
   RightButton: function( route, navigator, index, navState ){
     if(route.name == 'windowlist') {
       return (
+          
           <Button
-              onPress={() => { navigator.push( {
+              onPress={() => { 
+                addStore.id = null;
+                addStore.name = null;
+                addStore.description = null;
+                addressStore.latitude = null;
+                addressStore.longitude = null;
+                navigator.push( {
                     name: "add",
                     title: "Add Window",
                     passProps: {

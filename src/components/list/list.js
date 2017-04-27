@@ -1,9 +1,11 @@
 //import liraries
 import React, { Component } from 'react';
-import { View, Text, StyleSheet, TextInput, ListView , ActivityIndicator, TouchableOpacity, Image} from 'react-native';
+import { View, Alert, Text, StyleSheet, TextInput, ListView , ActivityIndicator, TouchableOpacity, Image} from 'react-native';
 import styles from '../../stylesheet/styles';
 import {observer } from "mobx-react/native";
 import windowsStore from '../../stores/list/list-store';
+import addStore from '../../stores/list/add/add-store';
+import addressStore from '../../stores/list/add/address/address-store';
 
 @observer
 class WindowList extends Component {
@@ -11,27 +13,38 @@ class WindowList extends Component {
   renderRow(rowData, sectionID, rowID) {
       return (
         <View>
-        <TouchableOpacity 
-                  underlayColor={ "#fff" } style={ [styles.card , {marginBottom:2, marginTop:2} ]}  onPress={() => this.gotoDetails(rowData.id, rowData.readApiKey, rowData.writeApiKey)}>
+        <View 
+                  underlayColor={ "#fff" } style={ [styles.card , {marginBottom:2, marginTop:2} ]}>
 
-                 <View style={{flex:1, flexDirection:'row'}}>
+                 <View style={{flex:1, flexDirection:'row'}}> 
+                  <TouchableOpacity style={{flex:2, flexDirection:'column'}} onPress={() => this.gotoDetails(rowData.id, rowData.readApiKey, rowData.writeApiKey)}>
                     <Text style={{padding: 10, flex:1, alignSelf: 'flex-start'}}>{ rowData.name.toUpperCase() }</Text>
-                    
-                     <Image style={{flex:1,alignSelf:'flex-end', height:30, width:50, marginTop:10}} source={require('../../images/pencil-icon.png')} resizeMode='contain'  onPress={() => this.gotoEdit(rowData.id)}/>
-                  </View>    
-                  <Text style={{paddingLeft: 10, color:'grey'}}>ID: { rowData.id }</Text>
-   
-
-        </TouchableOpacity>
+                    <Text style={{paddingLeft: 10, color:'grey'}}>ID: { rowData.id }</Text>
+                  </TouchableOpacity>    
+                   <View style={{flex:1,alignItems:'flex-end',flexDirection:'row'}}>
+                    <TouchableOpacity  onPress={() => this.gotoEdit(rowData)}>
+                      <Image  source={require('../../images/pencil-icon.png')} style={{flex:1, height:30, width:30, marginTop:10}} resizeMode='contain'/>
+                    </TouchableOpacity>
+                    <TouchableOpacity  onPress={() => this.deleteWindow(rowData)}>  
+                      <Image  source={require('../../images/trashcan.png')} style={{flex:1,alignSelf:'flex-end', height:50, width:50, marginTop:10, marginLeft: 30}} resizeMode='contain'/>
+                    </TouchableOpacity>
+                   </View> 
+                 </View> 
+        </View>
         </View>
          
       );
   }
 
- gotoEdit =(id) => {
-      navigator.push( {
+ gotoEdit =(rowData) => {
+      addStore.setId(rowData.id)
+      addStore.setName(rowData.name);
+      addStore.setDescription(rowData.description);
+      addressStore.setLatitude(rowData.latitude);
+      addressStore.setLongitude(rowData.longitude);
+      this.props.navigator.push( {
                     name: "add",
-                    title: "Add Window",
+                    title: "Update Window",
                     passProps: {
                         type: "Scene"
                     }
@@ -39,7 +52,19 @@ class WindowList extends Component {
               ); 
  };
 
+ deleteWindow =(rowData) => {
+      Alert.alert(
+                    'Delete Window?',
+                    'This will permanently delete the window data. Are you sure?',
+                        [
+                            {text: 'OK', onPress: () => windowsStore.deleteWindow(rowData.id)},
+                            {text: 'CANCEL', onPress: () => console.log('cancel called')}
+                        ]
+                    );
+ };
+
   gotoDetails = (id, readKey, writeKey) => {
+      
       this.props.navigator.push( {
                 name: "details",
                 title: "Window Detail",
@@ -55,9 +80,7 @@ class WindowList extends Component {
 
 
   componentWillMount() {
-    const apiKey = this.props.apiKey;
-    //windowsStore.addWindow({name:'sdfdsf',readApiKey:'sdfsf', writeApiKey:'dsfsd'});
-    windowsStore.loadWindows(apiKey);
+    windowsStore.loadWindows();
   }
 
   render() {

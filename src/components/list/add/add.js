@@ -4,6 +4,8 @@ import { Picker,View,KeyboardAvoidingView, Text, StyleSheet, TextInput, Button ,
 import styles from '../../../stylesheet/styles';
 import {observer } from "mobx-react/native";
 import addStore from '../../../stores/list/add/add-store';
+import initStore from '../../../stores/tsinit/tsinit-store';
+import windowsStore from '../../../stores/list/list-store';
 import addressStore from '../../../stores/list/add/address/address-store';
 const Item = Picker.Item;
 
@@ -11,15 +13,11 @@ const Item = Picker.Item;
 class Add extends Component {
   
 
-  componentWillMount() {
-    const apiKey = this.props.apiKey;
-    
-  }
-
+  
   render() {
     const { name, description } = addStore;
     const { query, latitude, longitude} = addressStore;
-
+    const { apiKey } = initStore;
     return (
        <KeyboardAvoidingView style={[styles.container]}>
         
@@ -90,7 +88,14 @@ class Add extends Component {
          </View>
          
             <Button
-              onPress = {()=>console.log('button clocked')}
+              onPress = {()=>{
+                if(addStore.id!=null)
+                  addStore.updateChannel();
+                else
+                  addStore.addChannel();
+                
+                this.props.navigator.pop();  
+                }}
               title="Save"
               color="#16a085"
               accessibilityLabel="Save window information"
