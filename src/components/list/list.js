@@ -1,6 +1,6 @@
 //import liraries
 import React, { Component } from 'react';
-import { View, Alert, Text, StyleSheet, TextInput, ListView , ActivityIndicator, TouchableOpacity, Image} from 'react-native';
+import { View, RefreshControl, Alert, Text, StyleSheet, TextInput, ListView , ActivityIndicator, TouchableOpacity, Image} from 'react-native';
 import styles from '../../stylesheet/styles';
 import {observer } from "mobx-react/native";
 import windowsStore from '../../stores/list/list-store';
@@ -105,7 +105,19 @@ class WindowList extends Component {
           </View>
          
          
-          <ListView enableEmptySections={true} dataSource={ dataSource } renderRow={this.renderRow.bind(this)} style={{flex:3,alignSelf: 'stretch'}}></ListView>
+          <ListView 
+          refreshControl = {
+               <RefreshControl
+                refreshing={windowsStore.isLoading}
+                onRefresh={()=>windowsStore.loadWindows()}
+                tintColor="#ff0000"
+                title="Loading..."
+                titleColor="#00ff00"
+                colors={['#ff0000', '#00ff00', '#0000ff']}
+                //progressBackgroundColor="#ffff00"
+              />
+          }
+          enableEmptySections={true} dataSource={ dataSource } renderRow={this.renderRow.bind(this)} style={{flex:3,alignSelf: 'stretch'}}></ListView>
         
          
           

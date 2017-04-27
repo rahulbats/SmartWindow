@@ -1,6 +1,6 @@
 //import liraries
 import React, { Component } from 'react';
-import { Picker,View,KeyboardAvoidingView, Text, StyleSheet, TextInput, Button , ActivityIndicator, TouchableOpacity} from 'react-native';
+import { Platform, Picker,View,KeyboardAvoidingView, Text, StyleSheet, TextInput, Button , ActivityIndicator, TouchableOpacity} from 'react-native';
 import styles from '../../../stylesheet/styles';
 import {observer } from "mobx-react/native";
 import addStore from '../../../stores/list/add/add-store';
@@ -50,7 +50,7 @@ class Add extends Component {
               onChangeText={(text)=>addressStore.setLatitude(text)}
               value={latitude}
               placeholder="Latitude"
-              keyboardType = "numbers-and-punctuation"
+              keyboardType = {Platform.OS==='ios'? "numbers-and-punctuation":"numeric"}
               returnKeyType={"done"}
               maxLength={6}
               returnKeyType={"next"}
@@ -62,7 +62,7 @@ class Add extends Component {
                   onChangeText={(text)=>addressStore.setLongitude(text)}
                   value={longitude}
                   placeholder="Longitude"
-                  keyboardType = "numbers-and-punctuation"
+                  keyboardType = {Platform.OS==='ios'? "numbers-and-punctuation":"numeric"}
                   returnKeyType={"done"}
                   maxLength={6}
                   
