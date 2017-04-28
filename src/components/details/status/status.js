@@ -40,7 +40,7 @@ class Status extends Component {
                      
                     <View style={[styles.card,{flex: 1, flexDirection: 'row'}]}>   
                                  
-                                <Text  style={{flex:1}}>{open?"window is open":"Window is closed"}</Text>   
+                                <Text  style={{flex:3}}>{open?"window is open":"Window is closed"}</Text>   
                                 {statusStore.isStatusLoading?
                                                 <ActivityIndicator
                                                     animating={true}

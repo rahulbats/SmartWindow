@@ -2,25 +2,25 @@ import React, { Component } from 'react';
 import { View, Text, StyleSheet, Button, Slider, Switch, ActivityIndicator } from 'react-native';
 import {observer } from "mobx-react/native";
 import styles from '../../../stylesheet/styles';
-import smartStore  from "../../../stores/details/smart/smart-store";
+import awayStore  from "../../../stores/details/away/away-store";
 import TimerMixin from 'react-timer-mixin';
 
 
 @observer
-class Smart extends Component {
+class Away extends Component {
     mixins: [TimerMixin];
    
    componentWillMount() {
     const id = this.props.id;   
     const apiKey = this.props.readApiKey;
-    smartStore.loadSmart(id,apiKey);
+    awayStore.loadAway(id,apiKey);
   }
 
   componentDidMount() {
       const id = this.props.id;   
       const apiKey = this.props.readApiKey;
       
-      setInterval(()=>smartStore.loadSmart(id,apiKey),15000);
+      setInterval(()=>awayStore.loadAway(id,apiKey),15000);
       
   }
   
@@ -28,13 +28,13 @@ class Smart extends Component {
     render() {
         const apiKey  = this.props.writeApiKey;
         const id = this.props.id;
-        const { smart } = smartStore;
+        const { away } = awayStore;
        
         const unit ="C";
         return (
                     <View style={[styles.card,{flex: 1,flexDirection: 'row'}]}>
-                    <Text  style={{flex:3}}>{smart?"smart window is on":"smart window is off"}</Text>  
-                                {smartStore.isSmartLoading?
+                    <Text  style={{flex:3}}>{away?"Shutdown when away":"Dont shutdown when away"}</Text>  
+                                {awayStore.isLoading?
                                                 <ActivityIndicator
                                                     animating={true}
                                                     style={{height: 80}}
@@ -43,9 +43,9 @@ class Smart extends Component {
                                                     />
                                                 :
                                 <Switch 
-                                    onValueChange={(value) => smartStore.setSmart(value, apiKey)}
-                                    style={{marginBottom: 10,flex:1}}
-                                    value={smart} />
+                                    onValueChange={(value) => awayStore.setAway(value, apiKey)}
+                                    style={{marginBottom: 10,flex:1, alignSelf: 'flex-end'}}
+                                    value={away} />
                                 }
                   </View>              
         );
@@ -54,4 +54,4 @@ class Smart extends Component {
 
 
 //make this component available to the app
-export default Smart;
+export default Away;
