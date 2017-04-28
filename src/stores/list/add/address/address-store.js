@@ -43,11 +43,11 @@ class AddressStore {
 
     
     @action setLatitude(value) {
-        this.latitude = ''+Number(value).toFixed(2);
+        this.latitude = ''+value;
     }
 
     @action setLongitude(value) {
-        this.longitude = ''+Number(value).toFixed(2);
+        this.longitude = ''+value;
     }
 
     

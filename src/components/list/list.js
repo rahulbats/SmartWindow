@@ -93,14 +93,14 @@ class WindowList extends Component {
        <View style={styles.container}>
          <View style={styles.heading}>
                 
-               {windowsStore.isLoading &&
+               {/*windowsStore.isLoading &&
                <ActivityIndicator
                   animating={true}
                   style={[stylesLocal.centering, {height: 80}]}
                   size="large"
                   color="#00aa00"
                 />
-               }
+               */}
                <Text style={[styles.headingText,styles.text]}>Here are the list of your windows. Connect to one to control it.</Text>
           </View>
          

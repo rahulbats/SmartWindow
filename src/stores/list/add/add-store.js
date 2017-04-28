@@ -40,6 +40,12 @@ class AddStore {
                 description: this.description,
                 latitude: addressStore.latitude,
                 longitude: addressStore.longitude,
+                field1: 'indoor-temp',
+                field2: 'window-status',
+                field3: 'desired-temp',
+                field4: 'outdoor-temp',
+                field5: 'smarts',
+                field6: 'detect-away'
 
             })
         })

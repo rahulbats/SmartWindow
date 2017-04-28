@@ -9,8 +9,8 @@ import addressStore from '../../../../stores/list/add/address/address-store';
 class Address extends Component {
   
   populateLatLongAddress(lat, long , formatted_address){
-      addressStore.setLatitude(lat);
-      addressStore.setLongitude(long);
+      addressStore.setLatitude(Number(lat).toFixed(2));
+      addressStore.setLongitude(Number(long).toFixed(2));
       addressStore.setQuery(formatted_address, false);
 
      this.props.navigator.pop();    

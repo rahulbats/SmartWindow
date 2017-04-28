@@ -20,7 +20,7 @@ class Add extends Component {
     const { apiKey } = initStore;
     return (
        <KeyboardAvoidingView style={[styles.container]}>
-        
+          <Text style={{alignSelf: 'flex-start', padding: 5}}>Name</Text>
           <TextInput
               style={[styles.input,{flex:1, height:10}]}
               onChangeText={(text)=>addStore.setName(text)}
@@ -30,7 +30,7 @@ class Add extends Component {
               returnKeyType={"next"}
               onSubmitEditing={() => this.refs['SecondInput'].focus()}
           />
-         
+         <Text style={{alignSelf: 'flex-start', padding: 5}}>Description</Text>
          <TextInput
                 
                 style={[styles.input,{flex:1.5,textAlignVertical: 'top'}]}
@@ -41,9 +41,10 @@ class Add extends Component {
                 numberOfLines = {3}
                 
             />   
-         
-         <View behavior={'padding'} style={{ flex:1,flexDirection:'row'}}>
-           
+        
+         <View behavior={'padding'} style={{ flex:2,flexDirection:'row'}}>
+           <View style={{ flex:1,flexDirection:'column'}}>
+            <Text style={{padding: 5, marginLeft: 5}}>Latitude</Text> 
             <TextInput
               ref='SecondInput'
               style={[styles.input, {height:60, marginLeft:10, marginRight:5}]}
@@ -56,6 +57,10 @@ class Add extends Component {
               returnKeyType={"next"}
               onSubmitEditing={() => this.refs['ThirdInput'].focus()}
             />
+           </View>
+
+          <View style={{ flex:1,flexDirection:'column'}}>
+          <Text style={{padding: 5}}>Longitude</Text> 
           <TextInput
                   ref='ThirdInput'
                   style={[styles.input, {height:60, marginLeft:5, marginRight: 10}]}
@@ -66,10 +71,13 @@ class Add extends Component {
                   returnKeyType={"done"}
                   maxLength={6}
                   
-              />   
+              />  
+          </View>     
          </View>
          <Text style={{flex:1, marginTop:20}}> OR </Text>
-         <View behavior={'padding'} style={{flex:1, alignSelf:'stretch'}}>
+
+         <View behavior={'padding'} style={{flex:2, alignSelf:'stretch'}}>
+          <Text style={{alignSelf: 'flex-start', padding: 5}}>Address</Text>
           <TextInput
                     style={[styles.input,{alignSelf:'stretch'}]}
                     placeholder="Window Address"
