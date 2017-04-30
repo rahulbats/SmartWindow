@@ -8,7 +8,6 @@ import Outdoor from './outdoor/outdoor';
 import Desired from './desired/desired';
 import Smart from './smart/smart';
 import Status from './status/status';
-import Away from './away/away';
 import detailsStore from '../../stores/details/details-store';
 
 @observer
@@ -84,8 +83,7 @@ class Details extends Component {
                          
                             <Smart id={id} readApiKey={readApiKey} writeApiKey={writeApiKey}/>
                             <Status id={id} readApiKey={readApiKey} writeApiKey={writeApiKey}/>
-                            <Away id={id} readApiKey={readApiKey} writeApiKey={writeApiKey}/>
-                            
+                           
             </View>
 
         );

@@ -25,10 +25,11 @@ const styles = StyleSheet.create({
         flex:1,
         alignSelf: 'stretch',
         //textAlign: 'center',
-        marginBottom: 20,
+        margin: 10,
+        marginTop:0,
         borderRadius:2,
         paddingLeft: 10,
-        height: 30,
+        //height: 30,
         backgroundColor: '#ffffff'
     },
     button: {

@@ -44,8 +44,7 @@ class AddStore {
                 field2: 'window-status',
                 field3: 'desired-temp',
                 field4: 'outdoor-temp',
-                field5: 'smarts',
-                field6: 'detect-away'
+                field5: 'smarts'
 
             })
         })
