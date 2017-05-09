@@ -13,17 +13,29 @@ class Smart extends Component {
    componentWillMount() {
     const id = this.props.id;   
     const apiKey = this.props.readApiKey;
-    smartStore.loadSmart(id,apiKey);
+    smartStore.setLoading(true);
+    this.loadSmart(id,apiKey);
   }
 
   componentDidMount() {
       const id = this.props.id;   
       const apiKey = this.props.readApiKey;
       
-      setInterval(()=>smartStore.loadSmart(id,apiKey),15000);
+      setInterval(()=>this.loadSmart(id,apiKey),15000);
       
   }
   
+  loadSmart(id,apiKey) {
+         fetch('https://api.thingspeak.com/channels/'+id+'/fields/5/last.json?api_key='+apiKey)
+            .then((response) => response.json())
+            .then((responseJson) => {
+                smartStore.setSmart (responseJson.field5==="0"?false:true);
+                smartStore.setLoading(false);
+            })
+            .catch((error) => {
+                console.error(error);
+            });
+  }
 
     render() {
         const apiKey  = this.props.writeApiKey;
@@ -43,7 +55,7 @@ class Smart extends Component {
                                                     />
                                                 :
                                 <Switch 
-                                    onValueChange={(value) => smartStore.setSmart(value, apiKey)}
+                                    onValueChange={(value) => smartStore.changeSmart(value, apiKey)}
                                     style={{marginBottom: 10,flex:1}}
                                     value={smart} />
                                 }

@@ -3,14 +3,14 @@ import detailsStore from "../details-store";
 
 class DesiredStore {
     @observable desiredTemp = 20;
-    @observable pendingDesiredRequestCount = 0;
+    @observable isLoading = false;
     @observable sliderTemp = 50;
     @observable minTemp = 10;
     @observable maxTemp = 50;
 
-   @computed get isDesiredLoading() {
-		return this.pendingDesiredRequestCount > 0;
-	}
+   @action setLoading(value) {
+      this.isLoading = value;
+    }
 
   @computed get getDesiredTemp() {
 		return detailsStore.unit === 'C'?this.desiredTemp:Math.round((this.desiredTemp * 1.8)+32);
@@ -27,6 +27,7 @@ class DesiredStore {
   @computed get getMaxTemp() {
 		return detailsStore.unit === 'C'?this.maxTemp:Math.round((this.maxTemp * 1.8)+32);
 	}
+
 
 
 
@@ -49,6 +50,9 @@ class DesiredStore {
             });
   }  
 
+   @action setDesired(value) {
+		return this.desiredTemp = Math.round(value);
+	} 
 
    @action setSlider(value) {
 		return this.sliderTemp = Math.round(value);

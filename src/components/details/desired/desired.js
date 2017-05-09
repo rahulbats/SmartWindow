@@ -10,17 +10,34 @@ import TimerMixin from 'react-timer-mixin';
 class Desired extends Component {
     mixins: [TimerMixin];
    
+    loadDesired(id,apiKey,setSlider) {
+        
+         fetch('https://api.thingspeak.com/channels/'+id+'/fields/3/last.json?api_key='+apiKey)
+            .then((response) => response.json())
+            .then((responseJson) => {
+                
+                desiredStore.setDesired (Number(responseJson.field3)) ;
+                if(setSlider) {
+                  desiredStore.setSlider(Number(responseJson.field3));
+                }
+                desiredStore.setLoading(false);
+            })
+            .catch((error) => {
+                console.error(error);
+            });
+    }  
+
    componentWillMount() {
-    const id = this.props.id;   
-    const apiKey = this.props.readApiKey;
-    //windowsStore.addWindow("dfsdfsdf");
-    desiredStore.loadDesired(id,apiKey,true);
+        const id = this.props.id;   
+        const apiKey = this.props.readApiKey;
+        desiredStore.setLoading(true);
+        desiredStore.loadDesired(id,apiKey,true);
   }
+
 
   componentDidMount() {
       const id = this.props.id;   
       const apiKey = this.props.readApiKey;
-      
       setInterval(()=>desiredStore.loadDesired(id,apiKey),15000);
   }
   

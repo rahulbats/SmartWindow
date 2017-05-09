@@ -2,34 +2,36 @@ import {observable, action, computed} from "mobx"
 import { Alert } from 'react-native';
 class StatusStore {
     @observable open = true;
-    @observable pendingStatusRequestCount = 0;
+    @observable isLoading = false;
     @observable displayError = false;
   
-    @computed get isStatusLoading() {
-     return this.pendingStatusRequestCount > 0;
-	}
+    @action setLoading(value) {
+      this.isLoading = value;
+    }
+
+    @action setOpen(value) {
+        this.open = value;
+    }
 
   @action setDisplayError(value) {
       displayError = value;
   }
 
-  @action loadStatus(id,apiKey) {
-        this.pendingStatusRequestCount++;
-         fetch('https://api.thingspeak.com/channels/'+id+'/fields/2/last.json?api_key='+apiKey)
-            .then((response) => response.json())
-            .then((responseJson) => {
-                this.open = responseJson.field2==="0"?false:true;
-                this.pendingStatusRequestCount--;
-            })
-            .catch((error) => {
-                console.error(error);
-            });
+  
+  @action getIpAddressOfESP(id, apiKey) {
+      this.pendingStatusRequestCount++;
+      return fetch('https://api.thingspeak.com/channels/'+id+'/fields/2/last.json?api_key='+apiKey);
+  }
+  
+  @action setStatusLocal(ipAddress, value) {
+        return fetch("http://"+ipAddress+"/"+value?"open":"close")
+                    .then((response) => response.json())
+                    .then((data) => {});
   }
 
-  
-  @action setStatus(value, apiKey) {
-      this.pendingStatusRequestCount++;
-        fetch("https://api.thingspeak.com/update", {
+  @action setStatusRemote(value, apiKey) {
+      
+        return fetch("https://api.thingspeak.com/update", {
             method: 'POST',
             headers: {
                 'Accept': 'application/json',
@@ -56,17 +58,7 @@ class StatusStore {
                 //this.displayError = false;
             }
             this.pendingStatusRequestCount--;
-        })
-        .catch((error) => {
-                console.error(error);
-                Alert.alert(
-                    'Thingspeak returned error',
-                    'You might be updating too quickly. Thingspeak throttles free accounts.',
-                    [
-                        {text: 'OK', onPress: () => console.log('OK Pressed!')},
-                    ]
-                );
-            });
+        });
  
 	}  
    

@@ -11,20 +11,34 @@ class Indoor extends Component {
     mixins: [TimerMixin];
    
    componentWillMount() {
+
     const id = this.props.id;   
     const apiKey = this.props.readApiKey;
-    //windowsStore.addWindow("dfsdfsdf");
-    indoorStore.loadIndoor(id,apiKey);
+    indoorStore.setLoading(true);
+    this.loadIndoor(id,apiKey)
+                .catch((error) => {
+                    console.error(error);
+                });
   }
 
   componentDidMount() {
       const id = this.props.id;   
       const apiKey = this.props.readApiKey;
-      
-      setInterval(()=>indoorStore.loadIndoor(id,apiKey),15000);
-      
+      setInterval(
+        () => { this.loadIndoor(id, apiKey) },
+        15000
+      );
   }
   
+  loadIndoor(id,apiKey) {
+         
+         return fetch('https://api.thingspeak.com/channels/'+id+'/fields/1/last.json?api_key='+apiKey)
+            .then((response) => response.json())
+            .then((responseJson) => {
+                indoorStore.setIndoorTemp(Number(responseJson.field1))
+                indoorStore.setLoading(false) ;
+            });
+  }  
 
     render() {
         const apiKey  = this.props.writeApiKey;
@@ -36,7 +50,7 @@ class Indoor extends Component {
    
                     <View style={stylesLocal.temperatureCard}>
                         <Text style={{color: 'white'}}>Current Indoor Temperature</Text>
-                        {indoorStore.isIndoorLoading?
+                        {indoorStore.isLoading?
                             <ActivityIndicator
                                 animating={true}
                                 size="small"

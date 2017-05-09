@@ -3,12 +3,12 @@ import detailsStore from "../details-store";
 
 class OutdoorStore {
     @observable outdoorTemp = 20;
-    @observable pendingOutdoorRequestCount = 0;
- 
-  
-  @computed get isOutdoorLoading() {
-		return this.pendingOutdoorRequestCount > 0;
-	}
+    @observable isLoading = false;
+
+    @action setLoading(value) {
+      this.isLoading = value;
+    }
+
 
     @computed get getOutdoorTemp() {
 		return detailsStore.unit === 'C'?this.outdoorTemp:Math.round((this.outdoorTemp * 1.8)+32);
@@ -18,19 +18,9 @@ class OutdoorStore {
         this.unit = value;
     }
 
-  @action loadOutdoor(id,apiKey) {
-        this.pendingOutdoorRequestCount++;
-         this.outdoorTemp = 20;
-         fetch('https://api.thingspeak.com/channels/'+id+'/fields/4/last.json?api_key='+apiKey)
-            .then((response) => response.json())
-            .then((responseJson) => {
-                this.outdoorTemp = Number(responseJson.field4);
-                this.pendingOutdoorRequestCount--;
-            })
-            .catch((error) => {
-                console.error(error);
-            });
-  }  
+    @action setOutdoorTemp(value) {
+		this.outdoorTemp = value;
+	}
    
 }
 var outdoorStore = new OutdoorStore;

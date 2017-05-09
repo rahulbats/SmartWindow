@@ -13,17 +13,32 @@ class Outdoor extends Component {
    componentWillMount() {
     const id = this.props.id;   
     const apiKey = this.props.readApiKey;
-    //windowsStore.addWindow("dfsdfsdf");
-    outdoorStore.loadOutdoor(id,apiKey);
+    outdoorStore.setLoading(true);
+         
+    this.loadOutdoor(id,apiKey)
+                .catch((error) => {
+                    console.error(error);
+                });
   }
 
   componentDidMount() {
       const id = this.props.id;   
       const apiKey = this.props.readApiKey;
       
-      setInterval(()=>outdoorStore.loadOutdoor(id,apiKey),15000);
+      setInterval(
+        () => { this.loadOutdoor(id, apiKey) },
+        15000
+      );
   }
   
+  loadOutdoor(id,apiKey) {
+         return fetch('https://api.thingspeak.com/channels/'+id+'/fields/4/last.json?api_key='+apiKey)
+            .then((response) => response.json())
+            .then((responseJson) => {
+                outdoorStore.setOutdoorTemp(Number(responseJson.field4))
+                outdoorStore.setLoading(false) ;
+            });
+  }  
 
     render() {
         const apiKey  = this.props.writeApiKey;
