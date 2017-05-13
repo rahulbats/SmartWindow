@@ -5,6 +5,7 @@ import styles from '../../stylesheet/styles';
 import {observer } from "mobx-react/native";
 import windowsStore from '../../stores/list/list-store';
 import addStore from '../../stores/list/add/add-store';
+import detailsStore from '../../stores/details/details-store';
 import addressStore from '../../stores/list/add/address/address-store';
 
 @observer
@@ -17,7 +18,7 @@ class WindowList extends Component {
                   underlayColor={ "#fff" } style={ [styles.card , {marginBottom:2, marginTop:2} ]}>
 
                  <View style={{flex:1, flexDirection:'row'}}> 
-                  <TouchableOpacity style={{flex:2, flexDirection:'column'}} onPress={() => this.gotoDetails(rowData.id, rowData.readApiKey, rowData.writeApiKey)}>
+                  <TouchableOpacity style={{flex:2, flexDirection:'column'}} onPress={() => this.gotoDetails(rowData.name)}>
                     <Text style={{padding: 10, flex:1, alignSelf: 'flex-start'}}>{ rowData.name.toUpperCase() }</Text>
                     <Text style={{paddingLeft: 10, color:'grey'}}>ID: { rowData.id }</Text>
                   </TouchableOpacity>    
@@ -63,16 +64,13 @@ class WindowList extends Component {
                     );
  };
 
-  gotoDetails = (id, readKey, writeKey) => {
-      
+  gotoDetails = (name) => {
+      detailsStore.setGroup(name);
       this.props.navigator.push( {
                 name: "details",
                 title: "Window Detail",
                 passProps: {
-                    type: "Modal",
-                    id: id,
-                    readApiKey: readKey,
-                    writeApiKey: writeKey
+                    type: "Modal"
                 }
             }
         );

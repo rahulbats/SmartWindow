@@ -1,10 +1,16 @@
-import {observable} from "mobx"
+import {observable, action} from "mobx"
 
 class InitStore {
-    @observable apiKey = "";
+    @observable aioKey = "";
+    @observable username = "";
     @observable animOpacity = 0;
-    setApiKey(value) {
-        this.apiKey = value;
+    @action
+    setAioKey(value) {
+        this.aioKey = value;
+    }
+    @action
+    setUsername(value) {
+        this.username = value;
     }
 }
 

@@ -12,86 +12,94 @@ import {
 import {observer } from "mobx-react/native";
 import styles from '../../../stylesheet/styles';
 import statusStore  from "../../../stores/details/status/status-store";
+import initStore from '../../../stores/tsinit/tsinit-store';
+import detailsStore from '../../../stores/details/details-store';
 import TimerMixin from 'react-timer-mixin';
+import { Client, Message } from 'react-native-paho-mqtt';
+
 
 
 @observer
 class Status extends Component {
     mixins: [TimerMixin];
-    connectionInfo =  null;
+    client;
    
+   setUpMQTT(id) {
+        const myStorage = {
+            setItem: (key, item) => {
+                myStorage[key] = item;
+            },
+            getItem: (key) => myStorage[key],
+            removeItem: (key) => {
+                delete myStorage[key];
+            },
+        };
+        // Create a client instance 
+        this.client = new Client({ uri: 'wss://io.adafruit.com:443/mqtt/', clientId: '', storage: myStorage });
+        
+        this.client.on('connectionLost', (responseObject) => {
+            if (responseObject.errorCode !== 0) {
+                console.log(responseObject.errorMessage);
+            }
+        });
+        this.client.on('messageReceived', (message) => {
+            console.log(message.payloadString);
+            statusStore.setOpen (message.payloadString==="OFF"?false:true) ;
+        });
 
-   componentWillMount() {
-    const id = this.props.id;   
-    const apiKey = this.props.readApiKey;
-    this.loadStatus(id,apiKey, true);
-  }
-
-  componentDidMount() {
-      const id = this.props.id;   
-      const apiKey = this.props.readApiKey;
-      
-      setInterval(()=>this.loadStatus(id,apiKey),15000);
-      NetInfo.addEventListener(
-            'change',
-            this._handleConnectionInfoChange
-        );
-        NetInfo.fetch().done(
-            (connectionInfo) => { this.connectionInfo = connectionInfo; }
-        );
+        // connect the client 
+        this.client.connect({
+            userName: initStore.username,
+            password: initStore.aioKey
+        })
+        .then(() => {
+            // Once a connection has been made, make a subscription and send a message. 
+            console.log('onConnect');
+            return this.client.subscribe(initStore.username + '/f/'+id);
+            //return client.subscribe('World');
+        })
+        .catch((responseObject) => {
+            if (responseObject.errorCode !== 0) {
+            console.log('onConnectionLost:' + responseObject.errorMessage);
+            }
+        });
    }
 
+   componentWillMount() {
+        statusStore.setLoading(false);
+        this.loadStatus();
+    }
+
    loadStatus(id,apiKey) {
-         fetch('https://api.thingspeak.com/channels/'+id+'/fields/2/last.json?api_key='+apiKey)
-            .then((response) => response.json())
-            .then((responseJson) => {
-                statusStore.setOpen (responseJson.field2==="0"?false:true) ;
-                statusStore.setLoading(false);
+         fetch('https://io.adafruit.com/api/v2/'+initStore.username+'/feeds/'+detailsStore.group.toLowerCase()+'.window-command/details', {
+                method: 'GET',
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json',
+                    'X-AIO-Key': initStore.aioKey
+                }
             })
-            .catch((error) => {
-                console.error(error);
-            });
-  }
-
-  _handleConnectionInfoChange = (connectionInfo) => {
-    this.connectionInfo = connectionInfo;
-  };
-
-  componentWillUnmount() {
-    NetInfo.removeEventListener(
-        'change',
-        this._handleConnectionInfoChange
-    );
-  }
+                .then((response) => response.json())
+                .then((responseJson) => {
+                    statusStore.setOpen (responseJson.details.data.last.table.value==="OFF"?false:true) ;
+                    statusStore.setLoading(false);
+                    this.setUpMQTT(id);
+                })
+                .catch((error) => {
+                    console.error(error);
+                });   
+  } 
 
   setStatus = (value) => {
-    
-
-    if(this.connectionInfo==='wifi') {
-        var ipaddressPromise = statusStore.getIpAddressOfESP(this.props.id,  this.props.readApiKey);
-        console.log(this.connectionInfo);
-        ipaddressPromise
-               .then((response) => response.json())
-                    .then((responseJson) => { 
-                              var ipAddress = responseJson.field6;
-                              return statusStore.setStatusLocal(ipAddress, value)
-                                            .catch((error)=>{
-                                                console.log('Local update failed will try remote');
-                                                //local failed (may be not in wifi lets try remote)
-                                                return statusStore.setStatusRemote(this.props.id, value, this.props.writeApiKey)
-                                                    .catch(console.log(error));
-                                            });
-                    })
-                .catch((error)=>console.log(error));   
-    } else {
-        statusStore.setStatusRemote(this.props.id, value, this.props.writeApiKey)
-             .catch(console.log(error));
-    }
-    
+            const message = new Message(value?'ON':'OFF');
+            message.destinationName = this.username + '/feeds/'+detailsStore.group+'.window-command';
+            this.client.send(message);
+            statusStore.setOpen(value);
+           
   };
 
 
-  showErrorAlert = () => {
+  /*showErrorAlert = () => {
     Alert.alert(
             'Thingspeak returned error',
             'You might be updating too quickly. Thingspeak allows 1 update per 15 seconds for free accounts.',
@@ -99,7 +107,7 @@ class Status extends Component {
                 {text: 'OK', onPress: () => console.log('OK Pressed!')},
             ]
         );
-  };
+  };*/
 
     render() {
         const apiKey  = this.props.writeApiKey;
@@ -111,7 +119,7 @@ class Status extends Component {
                      
                     <View style={[styles.card,{flex: 1, flexDirection: 'row'}]}>   
                                 
-                                <Text  style={{flex:2}}>{open?"window is open":"Window is closed"}</Text>  
+                                <Text  style={{flex:2}}>{open?"Close window":"Open window"}</Text>  
                                       
                                 {statusStore.isStatusLoading ?
                                                 <ActivityIndicator

@@ -13,24 +13,19 @@ class WindowsStore {
          this.pendingRequestCount++;
          this.windows = [];
          var temp =[];
-         fetch('https://thingspeak.com/channels.json?api_key='+initStore.apiKey)
+         fetch('https://io.adafruit.com/api/v2/'+initStore.username+'/groups', {
+            method: 'GET',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+                'X-AIO-Key': initStore.aioKey
+            }
+        })
             .then((response) => response.json())
             .then((responseJson) => {
-                responseJson.forEach(channel=>{
-                    var apiKeys = channel.api_keys;
-                    var readKey='';
-                    var writeKey='';
-                    apiKeys.forEach(apiKey => {
-                        if(apiKey.write_flag===false) {
-                            readKey = apiKey.api_key;
-                        } else {
-                            writeKey = apiKey.api_key;
-                        }
-                    });
-                    temp.push({name: channel.name, id:channel.id, description: channel.description, 
-                         latitude: channel.latitude,
-                         longitude: channel.longitude,
-                         readApiKey: readKey, writeApiKey: writeKey});
+                responseJson.forEach(group=>{
+                    temp.push({name: group.name, id:group.id, description: group.description, 
+                         key: group.key});
                     
                 });
                 this.windows.replace(temp);

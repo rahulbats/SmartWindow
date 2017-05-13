@@ -6,13 +6,17 @@ import { View, Text, StatusBar, StyleSheet,
     Easing, FadeInView, Linking, TouchableOpacity
 } from 'react-native';
 import {observer } from "mobx-react/native";
-import {WindowList} from "../list/list"
+import {WindowList} from "../list/list";
+import initStore  from "../../stores/tsinit/tsinit-store";
 //import styles from '../../stylesheet/styles';
 @observer
 class TsInit extends Component {
     
-    updateProperty ( value) {
-        this.props.store.setApiKey (value);
+    updateUsername ( value) {
+        initStore.setUsername (value);
+    }
+    updateKey ( value) {
+        initStore.setAioKey (value);
     }
     constructor(){
         super();
@@ -21,36 +25,38 @@ class TsInit extends Component {
         };
         
     }
-    async retrieveApiKey(){
+    async retrieveUserInfo(){
         try {
-            const value = await AsyncStorage.getItem('apiKey');
-            if (value !== null){
+            const key = await AsyncStorage.getItem('aioKey');
+            const username = await AsyncStorage.getItem('username');
+            if (key !== null && username !== null){
                 // We have data!!
-                this.props.store.apiKey = value;
-                this.gotoList(value);
+                initStore.setAioKey (key);
+                initStore.setUsername (username);
+                this.gotoList();
             }
         } catch (error) {
         // Error retrieving data
         }
     }
-    async saveApiKey(apiKey){
+    async saveUserInfo(apiKey, username){
         Keyboard.dismiss(); 
         try {
-            await AsyncStorage.setItem('apiKey', apiKey);
+            await AsyncStorage.setItem('aioKey', apiKey);
+            await AsyncStorage.setItem('username', username);
         } catch (error) {
         // Error saving data
         }
-        this.gotoList(apiKey);
+        this.gotoList();
     }
-     gotoList(apiKey){
+     gotoList(){
         //windowsStore.loadWindows(apiKey);
         
         this.props.navigator.push( {
                 name: "windowlist",
                 title: "Windows List",
                 passProps: {
-                    type: "Modal",
-                    apiKey: apiKey
+                    type: "Modal"
                 }
             }
         );
@@ -64,13 +70,13 @@ class TsInit extends Component {
             duration: 2000,
         }                              
         ).start();                
-        this.retrieveApiKey();
+        this.retrieveUserInfo();
     }
 
     render() {
         
         
-        const { apiKey } = this.props.store
+        const { aioKey, username } = initStore
         return (
                          
                             <Animated.View                            // Special animatable View
@@ -93,18 +99,27 @@ class TsInit extends Component {
                                                  
                                                  <TextInput
                                                     style={styles.input}
-                                                    onChangeText={(text)=>this.updateProperty(text)}
-                                                    value={apiKey}
-                                                    placeholder="Thingspeak API key"
+                                                    onChangeText={(text)=>this.updateUsername(text)}
+                                                    value={username}
+                                                    placeholder="Adafruit username"
                                                     maxLength={20}
                                                     underlineColorAndroid={'transparent'}
                                                 />
+                                                <TextInput
+                                                    style={styles.input}
+                                                    onChangeText={(text)=>this.updateKey(text)}
+                                                    value={aioKey}
+                                                    placeholder="Adafruit AIO key"
+                                                    maxLength={100}
+                                                    underlineColorAndroid={'transparent'}
+                                                />    
+
                                                    <View style={styles.button}>
                                                     <Button
-                                                        onPress = {()=>this.saveApiKey(apiKey)}
+                                                        onPress = {()=>this.saveUserInfo(aioKey, username)}
                                                         title="Connect"
                                                         color="green"
-                                                        accessibilityLabel="Connect to thingspeak using your api key"
+                                                        accessibilityLabel="Connect to io.adafruit"
                                                         /> 
                                                     
                                                   <TouchableOpacity onPress={() => Linking.openURL('https://thingspeak.com/account/profile')}>
