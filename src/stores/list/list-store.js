@@ -4,6 +4,7 @@ import initStore from '../tsinit/tsinit-store';
 class WindowsStore {
     @observable windows = [];
     @observable pendingRequestCount = 0;
+    client;
     
     @computed get isLoading() {
 		return this.pendingRequestCount > 0;
@@ -13,7 +14,7 @@ class WindowsStore {
          this.pendingRequestCount++;
          this.windows = [];
          var temp =[];
-         fetch('https://io.adafruit.com/api/v2/'+initStore.username+'/groups', {
+         fetch('https://io.adafruit.com/api/v2/'+initStore.username+'/feeds', {
             method: 'GET',
             headers: {
                 'Accept': 'application/json',
@@ -38,17 +39,15 @@ class WindowsStore {
             });
     }
 
-    @action deleteWindow(id){
+    @action deleteWindow(key){
          this.pendingRequestCount++;
-         fetch("https://api.thingspeak.com/channels/"+id+".json", {
+         fetch('https://io.adafruit.com/api/v2/'+initStore.username+'/feeds/'+key, {
             method: 'DELETE',
             headers: {
                 'Accept': 'application/json',
                 'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-                api_key:initStore.apiKey
-            })
+                'X-AIO-Key': initStore.aioKey
+            }
         })
         .then((response) => response.json())
         .then((responseJson) => {

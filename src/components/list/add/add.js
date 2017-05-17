@@ -17,7 +17,7 @@ class Add extends Component {
         if( addStore.name === '' || addStore.name === null ) {
             errorString = 'Name is mandatory. \n';
         }
-        if (addressStore.latitude === '' || addressStore.latitude === null ) {
+        /*if (addressStore.latitude === '' || addressStore.latitude === null ) {
             errorString = errorString + 'Latitude is mandatory. \n';
         } else {
           const latitudeNumber = Number(addressStore.latitude);
@@ -32,7 +32,7 @@ class Add extends Component {
             if(longitudeNumber<90 || longitudeNumber>90) {
               errorString = errorString + 'Longitude should be between -180  and +180. \n';
             }
-        }
+        }*/
 
         return errorString;
     }

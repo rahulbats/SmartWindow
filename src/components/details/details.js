@@ -8,7 +8,15 @@ import Outdoor from './outdoor/outdoor';
 import Desired from './desired/desired';
 import Smart from './smart/smart';
 import Status from './status/status';
+import windowsStore from '../../stores/list/list-store';
+import initStore from '../../stores/tsinit/tsinit-store';
 import detailsStore from '../../stores/details/details-store';
+import indoorStore  from "../../stores/details/indoor/indoor-store";
+import outdoorStore  from "../../stores/details/outdoor/outdoor-store";
+import desiredStore  from "../../stores/details/desired/desired-store";
+import smartStore  from "../../stores/details/smart/smart-store";
+import statusStore  from "../../stores/details/status/status-store";
+import { Client } from 'react-native-paho-mqtt';
 
 @observer
 class Details extends Component {
@@ -18,13 +26,60 @@ class Details extends Component {
         //this.state = {unit: 'C'};
     }
    
-  
+   
+   
+
+   initialLoad(){
+       fetch('https://io.adafruit.com/api/v2/'+initStore.username+'/feeds/'+detailsStore.key, {
+            method: 'GET',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+                'X-AIO-Key': initStore.aioKey
+            }
+        })
+            .then((response) => response.json())
+            .then((responseJson) => {
+                if(responseJson.last_value!==null) {
+                    var values = responseJson.last_value.split('_');
+                    indoorStore.setIndoorTemp (Number(values[0]));
+                    outdoorStore.setOutdoorTemp(Number(values[1]));
+                    desiredStore.setDesired(Number(values[2]));
+                    statusStore.setOpen (values[3]==="1"?true:false);
+                    smartStore.setSmart (values[4]==="1"?true:false);
+
+                }
+                    
+                statusStore.setLoading(false);
+                smartStore.setLoading(false);
+                indoorStore.setLoading(false);
+                outdoorStore.setLoading(false);
+                desiredStore.setLoading(false);
+                
+            })
+            .catch((error) => {
+                console.error(error);
+            });   
+   }
+
+   componentWillMount() {
+        windowsStore.client.subscribe(initStore.username + '/feeds/'+detailsStore.id);
+        statusStore.setLoading(true);
+        smartStore.setLoading(true);
+        indoorStore.setLoading(true);
+        outdoorStore.setLoading(true);
+        desiredStore.setLoading(true);
+        this.initialLoad();
+    }
+
+    componentWillUnmount() {
+        windowsStore.client.unsubscribe(initStore.username + '/feeds/'+detailsStore.id);
+    }
 
     render() {
         const writeApiKey  = this.props.writeApiKey;
         const readApiKey  = this.props.readApiKey;
-        const id = this.props.id;
-        const {unit} = detailsStore;
+        const {unit, id} = detailsStore;
         return (
    
             <View style={styles.container}>
@@ -70,19 +125,19 @@ class Details extends Component {
                            </View>     
                          <View style={[styles.card,{flex: 2}]}>
                                     <View style={{flexDirection: 'row'}}>
-                                        <Indoor id={id} readApiKey={readApiKey} unit={unit}/>
-                                        <Outdoor id={id} readApiKey={readApiKey} unit={unit}/>
+                                        <Indoor id={id} unit={unit}/>
+                                        <Outdoor id={id} unit={unit}/>
                                     </View>
                            </View>  
 
                            <View style={[styles.card,{flex: 2}]}>
                                     
-                                <Desired id={id} readApiKey={readApiKey} unit={unit} writeApiKey={writeApiKey}/>
+                                <Desired id={id} unit={unit}/>
                                
                             </View>
-                         
-                            <Smart id={id} readApiKey={readApiKey} writeApiKey={writeApiKey}/>
-                            <Status id={id} readApiKey={readApiKey} writeApiKey={writeApiKey}/>
+                            <Status id={id}/>
+                            <Smart id={id}/>
+                            
                            
             </View>
 

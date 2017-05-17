@@ -1,7 +1,7 @@
 import {observable, action, computed} from "mobx"
 import { Alert } from 'react-native';
 class StatusStore {
-    @observable open = true;
+    @observable open = false;
     @observable isLoading = false;
     @observable displayError = false;
   

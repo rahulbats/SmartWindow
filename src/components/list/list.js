@@ -7,6 +7,13 @@ import windowsStore from '../../stores/list/list-store';
 import addStore from '../../stores/list/add/add-store';
 import detailsStore from '../../stores/details/details-store';
 import addressStore from '../../stores/list/add/address/address-store';
+import initStore from '../../stores/tsinit/tsinit-store';
+import indoorStore  from "../../stores/details/indoor/indoor-store";
+import outdoorStore  from "../../stores/details/outdoor/outdoor-store";
+import desiredStore  from "../../stores/details/desired/desired-store";
+import smartStore  from "../../stores/details/smart/smart-store";
+import statusStore  from "../../stores/details/status/status-store";
+import { Client } from 'react-native-paho-mqtt';
 
 @observer
 class WindowList extends Component {
@@ -18,7 +25,7 @@ class WindowList extends Component {
                   underlayColor={ "#fff" } style={ [styles.card , {marginBottom:2, marginTop:2} ]}>
 
                  <View style={{flex:1, flexDirection:'row'}}> 
-                  <TouchableOpacity style={{flex:2, flexDirection:'column'}} onPress={() => this.gotoDetails(rowData.name)}>
+                  <TouchableOpacity style={{flex:2, flexDirection:'column'}} onPress={() => this.gotoDetails(rowData.id, rowData.key)}>
                     <Text style={{padding: 10, flex:1, alignSelf: 'flex-start'}}>{ rowData.name.toUpperCase() }</Text>
                     <Text style={{paddingLeft: 10, color:'grey'}}>ID: { rowData.id }</Text>
                   </TouchableOpacity>    
@@ -58,14 +65,15 @@ class WindowList extends Component {
                     'Delete Window?',
                     'This will permanently delete the window data. Are you sure?',
                         [
-                            {text: 'OK', onPress: () => windowsStore.deleteWindow(rowData.id)},
+                            {text: 'OK', onPress: () => windowsStore.deleteWindow(rowData.key)},
                             {text: 'CANCEL', onPress: () => console.log('cancel called')}
                         ]
                     );
  };
 
-  gotoDetails = (name) => {
-      detailsStore.setGroup(name);
+  gotoDetails = (id, key) => {
+      detailsStore.id = id;
+      detailsStore.key = key;
       this.props.navigator.push( {
                 name: "details",
                 title: "Window Detail",
@@ -77,8 +85,73 @@ class WindowList extends Component {
   };
 
 
+  connectMQTT= () => {
+        // connect the client 
+        console.log(windowsStore.client.isConnected());
+        if(!windowsStore.client.isConnected()) {
+                windowsStore.client.connect({
+                    userName: initStore.username,
+                    password: initStore.aioKey,
+                    keepAliveInterval: 60000,
+                    cleanSession:true
+                })
+                .then(() => {
+                    // Once a connection has been made, make a subscription and send a message. 
+                    console.log('onConnect');
+                    return windowsStore.client.subscribe(initStore.username + '/throttle');
+                    //return client.subscribe('World');
+                })
+                .catch((responseObject) => {
+                    if (responseObject.errorCode !== 0) {
+                      console.log(responseObject);
+                      setTimeout(()=>this.connectMQTT(), 5000);
+                    }
+                });
+        }       
+    };
+
+    setUpMQTT() {
+        const myStorage = {
+            setItem: (key, item) => {
+                myStorage[key] = item;
+            },
+            getItem: (key) => myStorage[key],
+            removeItem: (key) => {
+                delete myStorage[key];
+            },
+        };
+        // Create a client instance 
+        windowsStore.client = new Client({ uri: 'wss://io.adafruit.com:443/mqtt/', clientId: "smart_window_phone" + parseInt(Math.random() * 100, 10), storage: myStorage });
+        
+        windowsStore.client.on('connectionLost', (responseObject) => {
+            if (responseObject.errorCode !== 0) {
+                console.log(responseObject.errorMessage);
+                console.log('onConnectionLost: error code' + responseObject.errorCode);
+            }
+            this.connectMQTT();
+        });
+        windowsStore.client.on('messageReceived', (message) => {
+            console.log(message.destinationName);
+            if(message.destinationName===(initStore.username + '/throttle')) {
+              console.log(message);
+            } else {
+                var payload = message.payloadString;
+                var values = payload.split('_');
+                indoorStore.setIndoorTemp(Number(values[0]));
+                outdoorStore.setOutdoorTemp(Number(values[1]));
+                desiredStore.setDesired(Number(values[2]));
+                statusStore.setOpen (values[3]==="1"?true:false);
+                smartStore.setSmart (values[4]==="1"?true:false);
+            }
+            
+        });
+              
+   }
+
   componentWillMount() {
     windowsStore.loadWindows();
+    this.setUpMQTT();
+    this.connectMQTT(); 
   }
 
   render() {

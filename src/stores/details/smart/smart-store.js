@@ -1,7 +1,7 @@
 import {observable, action, computed} from "mobx"
 import { Alert } from 'react-native';
 class SmartStore {
-    @observable smart = true;
+    @observable smart = false;
     @observable isLoading = false;
    
    @action setLoading(value) {
