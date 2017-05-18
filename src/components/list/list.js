@@ -89,6 +89,8 @@ class WindowList extends Component {
         // connect the client 
         console.log(windowsStore.client.isConnected());
         if(!windowsStore.client.isConnected()) {
+                windowsStore.pendingRequestCount++;
+                console.log('before connect '+windowsStore.pendingRequestCount);
                 windowsStore.client.connect({
                     userName: initStore.username,
                     password: initStore.aioKey,
@@ -97,7 +99,8 @@ class WindowList extends Component {
                 })
                 .then(() => {
                     // Once a connection has been made, make a subscription and send a message. 
-                    console.log('onConnect');
+                    console.log('onConnect '+windowsStore.pendingRequestCount);
+                    windowsStore.pendingRequestCount--;
                     return windowsStore.client.subscribe(initStore.username + '/throttle');
                     //return client.subscribe('World');
                 })
@@ -135,11 +138,15 @@ class WindowList extends Component {
             if(message.destinationName===(initStore.username + '/throttle')) {
               console.log(message);
             } else {
+
                 var payload = message.payloadString;
                 var values = payload.split('_');
+                console.log('setting indoor '+values[0]);
                 indoorStore.setIndoorTemp(Number(values[0]));
+                console.log('setting outdoor '+values[1]);
                 outdoorStore.setOutdoorTemp(Number(values[1]));
                 desiredStore.setDesired(Number(values[2]));
+                console.log('setting open '+values[3]);
                 statusStore.setOpen (values[3]==="1"?true:false);
                 smartStore.setSmart (values[4]==="1"?true:false);
             }

@@ -26,7 +26,7 @@ class Smart extends Component {
     id;
 
   setSmart = (value) => {
-            smartStore.setSmart(value?'1':'0');
+            smartStore.setSmart(value);
             detailsStore.sendMessage(this.id);
             
   };
